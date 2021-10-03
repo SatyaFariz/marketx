@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  app:
+    command: npm run dev
+    ports:
+      - "4000:3000"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules/bcrypt/
+    env_file: ./env/dev.env
+    # environment:
+    #   - ENV=${ENV}
+    #   - PORT=${PORT}
+    #   - EXPRESS_SESSION_SECRET=${EXPRESS_SESSION_SECRET}
+    #   - MYSQL_URL=${MYSQL_URL}
+    #   - TELEGRAM_API_KEY=${TELEGRAM_API_KEY}
+  
+  mysql:
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=rental_app
+      - MYSQL_PASSWORD=root
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+
+  mongo:
+    volumes:
+      - mongodata:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: rental_app
+  
+  mongo2:
+    volumes: 
+      - mongodata2:/data/db
+
+  populate_data:
+    command: /bin/bash -c "sleep 60 && mysql -h mysql -u root --password=root --database rental_app < /administrative_area.sql"
+
+volumes:
+  mongodata:
+  mongodata2:
+  mysqldata:
+    
