@@ -9,18 +9,12 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules/bcrypt/
     env_file: ./env/dev.env
-    # environment:
-    #   - ENV=${ENV}
-    #   - PORT=${PORT}
-    #   - EXPRESS_SESSION_SECRET=${EXPRESS_SESSION_SECRET}
-    #   - MYSQL_URL=${MYSQL_URL}
-    #   - TELEGRAM_API_KEY=${TELEGRAM_API_KEY}
   
   mysql:
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=rental_app
-      - MYSQL_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     ports:
       - "3307:3306"
     volumes:
@@ -30,16 +24,16 @@ services:
     volumes:
       - mongodata:/data/db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
-      MONGO_INITDB_DATABASE: rental_app
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
   
   mongo2:
     volumes: 
       - mongodata2:/data/db
 
   populate_data:
-    command: /bin/bash -c "sleep 60 && mysql -h mysql -u root --password=root --database rental_app < /administrative_area.sql"
+    command: /bin/bash -c "sleep 60 && mysql -h mysql -u ${MYSQL_USER} --password=${MYSQL_PASSWORD} --database ${MYSQL_DATABASE} < /administrative_area.sql"
 
 volumes:
   mongodata:
