@@ -1518,30 +1518,34 @@ module.exports = new GraphQLObjectType({
         showsProductConditionField: { type: new GraphQLNonNull(GraphQLBoolean) },
         iconUrl: { type: new GraphQLNonNull(GraphQLString) }
       },
-      resolve: async (_, args) => {
-        const _id = mongoose.Types.ObjectId()
-        const icons = [
-          {
-            _id: uuidv4(),
-            url: args.iconUrl,
-            width: 500,
-            height: 500,
-            bytes: 0,
-            format: 'jpg',
-            display: 0
-          }
-        ]
-        const cat = new CategoryModel({
-          _id,
-          icons,
-          path: _id.toString(),
-          name: args.name,
-          listingType: args.listingType,
-          requiresProductCondition: args.requiresProductCondition,
-          showsProductConditionField: args.showsProductConditionField
-        })
-        await cat.save()
-        return 'created'
+      resolve: async (_, args, { session: { user }}) => {
+        if(user) {
+          const _id = mongoose.Types.ObjectId()
+          const icons = [
+            {
+              _id: uuidv4(),
+              url: args.iconUrl,
+              width: 500,
+              height: 500,
+              bytes: 0,
+              format: 'jpg',
+              display: 0
+            }
+          ]
+          const cat = new CategoryModel({
+            _id,
+            icons,
+            path: _id.toString(),
+            name: args.name,
+            listingType: args.listingType,
+            requiresProductCondition: args.requiresProductCondition,
+            showsProductConditionField: args.showsProductConditionField,
+            lastUpdatedBy: user.id,
+            isPublished: true
+          })
+          await cat.save()
+          return 'created'
+        }
       }
     },
     createSubcategory: {
@@ -1551,39 +1555,43 @@ module.exports = new GraphQLObjectType({
         name: { type: new GraphQLNonNull(GraphQLString) },
         iconUrl: { type: new GraphQLNonNull(GraphQLString) }
       },
-      resolve: async (_, { parentId, name, iconUrl }) => {
-        const parentCat = await CategoryModel.findById(parentId)
-        const subcat = new CategoryModel({ name, parentId })
-        subcat.path = `${parentCat.path}/${subcat._id.toString()}`
-        subcat.level = subcat.path.split('/').length
-        subcat.ancestorIds = [...parentCat.ancestorIds, parentId]
-        subcat.listingType = parentCat.listingType
-        subcat.specFields = parentCat.specFields.map(field => {
-          return {
-            _id: mongoose.Types.ObjectId(),
-            attributeId: field.attributeId,
-            isRequired: field.isRequired,
-            max,
-            min,
-            type,
-            options,
-            isEnum,
-            isAutocomplete
-          }
-        })
-        subcat.icons = [
-          {
-            _id: uuidv4(),
-            url: iconUrl,
-            width: 500,
-            height: 500,
-            bytes: 0,
-            format: 'jpg',
-            display: 0
-          }
-        ]
-        await subcat.save()
-        return subcat._id
+      resolve: async (_, { parentId, name, iconUrl }, { session: { user }}) => {
+        if(user) {
+          const parentCat = await CategoryModel.findById(parentId)
+          const subcat = new CategoryModel({ name, parentId })
+          subcat.path = `${parentCat.path}/${subcat._id.toString()}`
+          subcat.level = subcat.path.split('/').length
+          subcat.ancestorIds = [...parentCat.ancestorIds, parentId]
+          subcat.listingType = parentCat.listingType
+          subcat.lastUpdatedBy = user.id
+          subcat.isPublished = true
+          subcat.specFields = parentCat.specFields.map(field => {
+            return {
+              _id: mongoose.Types.ObjectId(),
+              attributeId: field.attributeId,
+              isRequired: field.isRequired,
+              max,
+              min,
+              type,
+              options,
+              isEnum,
+              isAutocomplete
+            }
+          })
+          subcat.icons = [
+            {
+              _id: uuidv4(),
+              url: iconUrl,
+              width: 500,
+              height: 500,
+              bytes: 0,
+              format: 'jpg',
+              display: 0
+            }
+          ]
+          await subcat.save()
+          return subcat._id
+        }
       }
     },
     createPost: {
