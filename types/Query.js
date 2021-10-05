@@ -8,8 +8,6 @@ const {
   GraphQLNonNull,
 } = require('graphql')
 const { forwardConnectionArgs } = require('graphql-relay')
-const mysql = require('mysql')
-const { mysqlConnection } = require('../lib')
 const { GraphQLEmail } = require('graphql-custom-types')
 
 const Post = require('./Post')
@@ -36,6 +34,7 @@ const ProductConditionModel = require('../database/models/ProductCondition')
 
 const relayConnectionFrom = require('../utils/relayConnectionFrom')
 const searchProducts = require('../utils/searchProducts')
+const getAdministrativeAreas = require('../utils/getAdministrativeAreas')
 
 module.exports = new GraphQLObjectType({
   name: 'Query',
@@ -173,13 +172,8 @@ module.exports = new GraphQLObjectType({
       args: {
         parentId: { type: GraphQLInt }
       },
-      resolve: async (_, { parentId }) => {
-        const sql = mysql.format('CALL get_administrative_areas(?)', [parentId])
-        return new Promise(resolve => {
-          mysqlConnection.query(sql, function (error, results, fields) {
-            resolve(results[0])
-          })
-        })
+      resolve: async (_, args) => {
+        return await getAdministrativeAreas(args)
       }
     },
     suspensionReasons: {
