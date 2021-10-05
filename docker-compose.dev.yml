@@ -9,16 +9,6 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules/bcrypt/
     env_file: ./env/dev.env
-  
-  mysql:
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-    ports:
-      - "3307:3306"
-    volumes:
-      - mysqldata:/var/lib/mysql
 
   mongo:
     volumes:
@@ -32,11 +22,7 @@ services:
     volumes: 
       - mongodata2:/data/db
 
-  populate_data:
-    command: /bin/bash -c "sleep 60 && mysql -h mysql -u ${MYSQL_USER} --password=${MYSQL_PASSWORD} --database ${MYSQL_DATABASE} < /administrative_area.sql"
-
 volumes:
   mongodata:
   mongodata2:
-  mysqldata:
     

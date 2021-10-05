@@ -36,24 +36,3 @@ services:
   redis:
     restart: always
     image: redis:alpine
-
-  mysql:
-    image: "mysql:8.0.15"
-    hostname: mysql
-    command: --default-authentication-plugin=mysql_native_password
-
-  populate_data:
-    image: mysql:8.0.15
-    depends_on:
-      - mysql
-    volumes:
-      - ./database/sql/administrative_area.sql:/administrative_area.sql
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    environment:
-      PMA_HOST: mysql
-    depends_on:
-      - mysql
-    ports:
-      - 8080:80

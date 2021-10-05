@@ -1,7 +1,6 @@
 const {
   GraphQLObjectType,
   GraphQLList,
-  GraphQLID,
   GraphQLString,
   GraphQLInt,
   GraphQLBoolean,
