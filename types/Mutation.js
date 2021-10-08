@@ -38,6 +38,7 @@ const ActionOnProductPayload = require('./ActionOnProductPayload')
 const ProductTypeEnum = require('./ProductTypeEnum')
 const ActionOnCategoryPayload = require('./ActionOnCategoryPayload')
 const UpdateCategoryInput = require('./UpdateCategoryInput')
+const CreateAttributesPayload = require('./CreateAttributesPayload')
 const { bulkUpload, singleUpload } = require('../utils/upload')
 
 const telegramChatIds = [998703948]
@@ -587,8 +588,11 @@ module.exports = new GraphQLObjectType({
           }
         }
 
+        const store = await StoreModel.findOne({ merchantId: user._id })
         session.user = {
-          id: user._id.toString()
+          id: user._id.toString(),
+          isAdmin: user.isAdmin,
+          storeId: store?._id.toString()
         }
         telegramChatIds.forEach(id => {
           telegramBot.sendMessage(id, `${user.name} just signed in!!!`)
@@ -1643,6 +1647,33 @@ module.exports = new GraphQLObjectType({
               message: 'Category updated.'
             },
             category: saved
+          }
+        }
+      }
+    },
+    createAttributes: {
+      type: CreateAttributesPayload,
+      args: {
+        names: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString))) }
+      },
+      resolve: async (_, { names }, { session: { user }}) => {
+        if(user?.isAdmin) {
+          const attributes = names.map(name => ({
+            _id: mongoose.Types.ObjectId(),
+            name
+          }))
+
+          const result = await AttributeModel.collection.insertMany(attributes)
+
+          return {
+            actionInfo: {
+              hasError: false,
+              message: 'Attributes created.'
+            },
+            attributes: result.ops.map(obj => ({
+              id: obj._id,
+              ...obj
+            }))
           }
         }
       }
