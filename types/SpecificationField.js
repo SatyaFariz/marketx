@@ -38,6 +38,9 @@ module.exports = new GraphQLObjectType({
     isEnum: {
       type: GraphQLBoolean
     },
+    isMulti: {
+      type: GraphQLBoolean
+    },
     isAutocomplete: {
       type: GraphQLBoolean
     }

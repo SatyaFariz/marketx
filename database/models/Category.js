@@ -76,6 +76,9 @@ const categorySchema = new Schema({
       isEnum: {
         type: Boolean
       },
+      isMulti: {
+        type: Boolean
+      },
       isAutocomplete: {
         type: Boolean
       }
