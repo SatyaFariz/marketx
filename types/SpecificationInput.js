@@ -1,5 +1,6 @@
 const {
   GraphQLString,
+  GraphQLBoolean,
   GraphQLInputObjectType,
   GraphQLNonNull,
 } = require('graphql')
@@ -12,6 +13,9 @@ module.exports = new GraphQLInputObjectType({
     },
     value: { 
       type: new GraphQLNonNull(GraphQLString)
+    },
+    isMulti: { 
+      type: GraphQLBoolean
     }
   }
 })
