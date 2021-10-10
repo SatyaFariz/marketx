@@ -39,6 +39,7 @@ const ProductTypeEnum = require('./ProductTypeEnum')
 const ActionOnCategoryPayload = require('./ActionOnCategoryPayload')
 const UpdateCategoryInput = require('./UpdateCategoryInput')
 const CreateAttributesPayload = require('./CreateAttributesPayload')
+const SpecificationFieldInput = require('./SpecificationFieldInput')
 const { bulkUpload, singleUpload } = require('../utils/upload')
 
 const telegramChatIds = [998703948]
@@ -1674,6 +1675,40 @@ module.exports = new GraphQLObjectType({
               id: obj._id,
               ...obj
             }))
+          }
+        }
+      }
+    },
+    createSpecificationFields: {
+      type: ActionOnCategoryPayload,
+      args: {
+        categoryId: { type: new GraphQLNonNull(GraphQLString) },
+        fields: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SpecificationFieldInput))) }
+      },
+      resolve: async (_, { categoryId, fields }, { session: { user }}) => {
+        if(user?.isAdmin) {
+          const lastUpdatedBy = user.id
+          const category = await CategoryModel.findByIdAndUpdate(
+            categoryId,
+            {
+              lastUpdatedBy,
+              $push: {
+                specFields: {
+                  $each: fields
+                }
+              }
+            },
+            {
+              new: true
+            }
+          )
+
+          return {
+            actionInfo: {
+              hasError: false,
+              message: 'Specification fields created.'
+            },
+            category
           }
         }
       }

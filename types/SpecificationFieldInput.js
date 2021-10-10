@@ -1,9 +1,10 @@
 const {
   GraphQLString,
   GraphQLFloat,
-  GraphQLBooelan,
+  GraphQLBoolean,
   GraphQLInputObjectType,
   GraphQLNonNull,
+  GraphQLList
 } = require('graphql')
 
 module.exports = new GraphQLInputObjectType({
