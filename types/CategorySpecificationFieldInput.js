@@ -28,6 +28,9 @@ module.exports = new GraphQLInputObjectType({
     isEnum: { 
       type: GraphQLBoolean
     },
+    isMulti: { 
+      type: GraphQLBoolean
+    },
     max: { 
       type: GraphQLFloat
     },
