@@ -88,6 +88,9 @@ const productSchema = new Schema({
       },
       value: {
         type: String
+      },
+      isMulti: {
+        type: Boolean
       }
     })],
     required: true,
