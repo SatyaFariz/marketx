@@ -22,7 +22,7 @@ module.exports = new GraphQLInputObjectType({
     max: { 
       type: GraphQLFloat
     },
-    isRequired: { 
+    min: { 
       type: GraphQLFloat
     },
     options: {
