@@ -5,6 +5,7 @@ const { Schema, model } = mongoose
 const productSchema = new Schema({
   sequence: {
     type: Schema.ObjectId,
+    required: true,
     unique: true
   },
   name:  {
@@ -111,8 +112,7 @@ const productSchema = new Schema({
     required: true
   },
   renewedAt: {
-    type: Date,
-    default: Date.now
+    type: Date
   }
 }, { timestamps: true })
 

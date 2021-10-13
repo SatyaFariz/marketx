@@ -4,7 +4,7 @@ const { isMongoId } = require('validator')
 
 module.exports = async ({ q, limit, after, categoryId, published, storeId, user }) => {
   const options = { 
-    sort: { _id: -1 }, 
+    sort: { sequence: -1 }, 
     limit: limit 
   }
 
@@ -19,7 +19,7 @@ module.exports = async ({ q, limit, after, categoryId, published, storeId, user 
   if(q.length === 0) {
 
     if(after)
-      query._id = { $lt: cursorToId(after) }
+      query.sequence = { $lt: cursorToId(after) }
 
     if(categoryId)
       query.category = categoryId
@@ -45,7 +45,7 @@ module.exports = async ({ q, limit, after, categoryId, published, storeId, user 
     }
 
     if(after)
-      query._id = { $lt: cursorToId(after) }
+      query.sequence = { $lt: cursorToId(after) }
 
     if(categoryId)
       query.category = categoryId

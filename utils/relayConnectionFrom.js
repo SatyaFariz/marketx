@@ -17,10 +17,10 @@ module.exports = async (first, fetchData) => {
 
     const lastItem = data[length - 1]
 
-    endCursor = idToCursor(lastItem._id)
+    endCursor = idToCursor(lastItem.sequence || lastItem._id)
 
     const edges = data.map(item => ({
-      cursor: idToCursor(item._id),
+      cursor: idToCursor(item.sequence || item._id),
       node: item
     }))
 

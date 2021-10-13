@@ -1177,7 +1177,10 @@ module.exports = new GraphQLObjectType({
             }
   
             const { provinceId, cityId, districtId } = store.address
+            const _id = mongoose.Types.ObjectId()
             const product = await new ProductModel({
+              _id,
+              sequence: _id,
               type,
               storeId,
               category: [...category.ancestorIds, categoryId],
@@ -1709,6 +1712,32 @@ module.exports = new GraphQLObjectType({
               message: 'Specification fields created.'
             },
             category
+          }
+        }
+      }
+    },
+    renewProduct: {
+      type: ActionInfo,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLString) }
+      },
+      resolve: async (_, { id }, { session: { user }}) => {
+        if(user) {
+          const lastUpdatedBy = user.id
+          await ProductModel.updateOne(
+            {
+              _id: id
+            },
+            {
+              lastUpdatedBy,
+              sequence: mongoose.Types.ObjectId(),
+              renewedAt: new Date()
+            }
+          )
+
+          return {
+            hasError: false,
+            message: 'Product renewed sucessfully.'
           }
         }
       }
