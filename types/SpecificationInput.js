@@ -16,6 +16,12 @@ module.exports = new GraphQLInputObjectType({
     },
     isMulti: { 
       type: GraphQLBoolean
+    },
+    prefix: {
+      type: GraphQLString
+    },
+    suffix: {
+      type: GraphQLString
     }
   }
 })

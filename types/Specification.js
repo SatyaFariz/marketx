@@ -24,5 +24,11 @@ module.exports = new GraphQLObjectType({
     isMulti: {
       type: GraphQLBoolean
     },
+    prefix: {
+      type: GraphQLString
+    },
+    suffix: {
+      type: GraphQLString
+    }
   }
 })
