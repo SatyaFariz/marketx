@@ -36,6 +36,12 @@ module.exports = new GraphQLInputObjectType({
     },
     min: { 
       type: GraphQLFloat
+    },
+    prefix: {
+      type: GraphQLString
+    },
+    suffix: {
+      type: GraphQLString
     }
   }
 })

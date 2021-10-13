@@ -36,6 +36,12 @@ module.exports = new GraphQLInputObjectType({
     },
     isAutocomplete: {
       type: GraphQLBoolean
+    },
+    prefix: {
+      type: GraphQLString
+    },
+    suffix: {
+      type: GraphQLString
     }
   }
 })

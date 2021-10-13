@@ -64,6 +64,12 @@ const categorySchema = new Schema({
       type: {
         type: String
       },
+      prefix: {
+        type: String
+      },
+      suffix: {
+        type: String
+      },
       max: {
         type: Number
       },
