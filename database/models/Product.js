@@ -3,6 +3,9 @@ const imageSchema = require('../schemas/Image')
 const { Schema, model } = mongoose
 
 const productSchema = new Schema({
+  sequence: {
+    type: Schema.ObjectId
+  },
   name:  {
     type: String,
     required: true,
@@ -106,6 +109,10 @@ const productSchema = new Schema({
     type: Schema.ObjectId,
     required: true
   },
+  renewedAt: {
+    type: Date,
+    default: Date.now
+  }
 }, { timestamps: true })
 
 const Product = model('Product', productSchema)
