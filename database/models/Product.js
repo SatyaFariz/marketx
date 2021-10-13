@@ -4,7 +4,8 @@ const { Schema, model } = mongoose
 
 const productSchema = new Schema({
   sequence: {
-    type: Schema.ObjectId
+    type: Schema.ObjectId,
+    unique: true
   },
   name:  {
     type: String,
