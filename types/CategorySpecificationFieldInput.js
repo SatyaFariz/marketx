@@ -2,6 +2,7 @@ const {
   GraphQLString,
   GraphQLBoolean,
   GraphQLFloat,
+  GraphQLInt,
   GraphQLInputObjectType,
   GraphQLNonNull,
   GraphQLList,
@@ -36,6 +37,9 @@ module.exports = new GraphQLInputObjectType({
     },
     min: { 
       type: GraphQLFloat
+    },
+    numberOfLines: { 
+      type: GraphQLInt
     },
     prefix: {
       type: GraphQLString

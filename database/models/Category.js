@@ -76,6 +76,9 @@ const categorySchema = new Schema({
       min: {
         type: Number
       },
+      numberOfLines: {
+        type: Number
+      },
       options: {
         type: [String]
       },
