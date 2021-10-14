@@ -14,11 +14,23 @@ module.exports = new GraphQLInputObjectType({
     attributeId: {
       type: new GraphQLNonNull(GraphQLString)
     },
+    type: { 
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    options: {
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString)))
+    },
     isRequired: { 
+      type: new GraphQLNonNull(GraphQLBoolean)
+    },
+    isAutocomplete: {
       type: GraphQLBoolean
     },
-    type: { 
-      type: GraphQLString
+    isEnum: {
+      type: GraphQLBoolean
+    },
+    isMulti: {
+      type: GraphQLBoolean
     },
     max: { 
       type: GraphQLFloat
@@ -28,18 +40,6 @@ module.exports = new GraphQLInputObjectType({
     },
     numberOfLines: { 
       type: GraphQLInt
-    },
-    options: {
-      type: new GraphQLList(GraphQLString)
-    },
-    isEnum: {
-      type: GraphQLBoolean
-    },
-    isMulti: {
-      type: GraphQLBoolean
-    },
-    isAutocomplete: {
-      type: GraphQLBoolean
     },
     prefix: {
       type: GraphQLString
