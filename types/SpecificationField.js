@@ -32,6 +32,9 @@ module.exports = new GraphQLObjectType({
     min: {
       type: GraphQLInt
     },
+    numberOfLines: {
+      type: GraphQLInt
+    },
     options: {
       type: new GraphQLList(GraphQLString)
     },
