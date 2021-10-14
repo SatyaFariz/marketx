@@ -6,7 +6,7 @@ const {
   GraphQLList
 } = require('graphql')
 
-const CategorySpecificationFieldInput = require('./CategorySpecificationFieldInput')
+const SpecificationFieldInput = require('./SpecificationFieldInput')
 
 module.exports = new GraphQLInputObjectType({
   name: 'UpdateCategoryInput',
@@ -27,7 +27,7 @@ module.exports = new GraphQLInputObjectType({
       type: GraphQLBoolean
     },
     specFields: {
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(CategorySpecificationFieldInput)))
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SpecificationFieldInput)))
     }
   }
 })
