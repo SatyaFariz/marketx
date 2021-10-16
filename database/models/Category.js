@@ -52,6 +52,9 @@ const categorySchema = new Schema({
   showsProductConditionField: {
     type: Boolean
   },
+  forceLocationInput: {
+    type: Boolean
+  },
   specFields: {
     type: [new Schema({
       attributeId: {

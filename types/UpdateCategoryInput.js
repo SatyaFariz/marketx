@@ -26,6 +26,9 @@ module.exports = new GraphQLInputObjectType({
     requiresProductCondition: { 
       type: GraphQLBoolean
     },
+    forceLocationInput: { 
+      type: GraphQLBoolean
+    },
     specFields: {
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SpecificationFieldInput)))
     }

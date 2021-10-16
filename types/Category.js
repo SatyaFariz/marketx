@@ -39,6 +39,9 @@ const Category = new GraphQLObjectType({
     showsProductConditionField: {
       type: GraphQLBoolean
     },
+    forceLocationInput: {
+      type: GraphQLBoolean
+    },
     listingType: {
       type: GraphQLString
     },

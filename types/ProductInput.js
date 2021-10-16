@@ -8,6 +8,7 @@ const {
 } = require('graphql')
 
 const SpecificationInput = require('./SpecificationInput')
+const LocationInput = require('./LocationInput')
 
 module.exports = new GraphQLInputObjectType({
   name: 'ProductInput',
@@ -23,6 +24,12 @@ module.exports = new GraphQLInputObjectType({
     },
     isPublished: {
       type: new GraphQLNonNull(GraphQLBoolean)
+    },
+    syncLocationWithStoreAddress: {
+      type: new GraphQLNonNull(GraphQLBoolean)
+    },
+    location: {
+      type: LocationInput
     },
     specs: {
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SpecificationInput)))

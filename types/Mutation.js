@@ -910,7 +910,7 @@ module.exports = new GraphQLObjectType({
               const opts = { session }
               updatedStore = await store.save(opts)
               const productUpdateResult = await ProductModel.updateMany(
-                { storeId: store._id },
+                { storeId: store._id, syncLocationWithStoreAddress: true },
                 { administrativeAreaIds: [
                     address.provinceId, 
                     address.cityId, 
@@ -999,23 +999,57 @@ module.exports = new GraphQLObjectType({
       },
       resolve: async (_, { id, input }, { session: { user }}) => {
         if(user) {
-          const product = await ProductModel.findByIdAndUpdate(
-            id, 
-            {
-              ...input,
-              lastUpdatedBy: user.id
-            },
-            { 
-              new: true
+          const data = await Promise.all([
+            StoreModel.findById(user.storeId),
+            ProductModel.findById(id)
+          ])
+
+          const [store, product] = data
+
+          if(input.syncLocationWithStoreAddress) {
+            product.administrativeAreaIds = [
+              store.address.provinceId,
+              store.address.cityId,
+              store.address.districtId
+            ]
+          } else if(!input.location) {
+            throw new Error('Location needed.')
+          }
+
+          for(let key in input) {
+            if(key === 'location') {
+              if(!input.syncLocationWithStoreAddress) {
+                product.administrativeAreaIds = [
+                  input.location.provinceId,
+                  input.location.cityId,
+                  input.location.districtId
+                ]
+              }
+            } else {
+              product[key] = input[key]
             }
-          )
+          }
+
+          product.lastUpdatedBy = user.id
+
+          const savedProduct = await product.save()
+          // const product = await ProductModel.findByIdAndUpdate(
+          //   id, 
+          //   {
+          //     ...input,
+          //     lastUpdatedBy: user.id
+          //   },
+          //   { 
+          //     new: true
+          //   }
+          // )
 
           return {
             actionInfo: {
               hasError: false,
               message: 'Product updated.'
             },
-            product
+            product: savedProduct
           }
         }
       }
@@ -1189,16 +1223,41 @@ module.exports = new GraphQLObjectType({
               images,
               administrativeAreaIds: [provinceId, cityId, districtId],
               merchantId: user.id,
-              lastUpdatedBy: user.id,
-              ...input
-            }).save()
+              lastUpdatedBy: user.id
+            })
+
+            if(input.syncLocationWithStoreAddress) {
+              product.administrativeAreaIds = [
+                store.address.provinceId,
+                store.address.cityId,
+                store.address.districtId
+              ]
+            } else if(!input.location) {
+              throw new Error('Location needed.')
+            }
+  
+            for(let key in input) {
+              if(key === 'location') {
+                if(!input.syncLocationWithStoreAddress) {
+                  product.administrativeAreaIds = [
+                    input.location.provinceId,
+                    input.location.cityId,
+                    input.location.districtId
+                  ]
+                }
+              } else {
+                product[key] = input[key]
+              }
+            }
+
+            const savedProduct = await product.save()
   
             return {
               actionInfo: {
                 hasError: false,
                 message: 'Product created.'
               },
-              product
+              product: savedProduct
             }
           } catch {
             Promise.all(uploadedImageIds.map(id => {
@@ -1630,6 +1689,7 @@ module.exports = new GraphQLObjectType({
           ])
           const [cat, uploadedImage] = data
           cat.name = input.name
+          cat.forceLocationInput = input.forceLocationInput
           cat.showsProductConditionField = input.showsProductConditionField
           cat.requiresProductCondition = !input.showsProductConditionField ? false : input.requiresProductCondition
           cat.isPublished = input.isPublished

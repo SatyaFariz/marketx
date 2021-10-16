@@ -40,6 +40,11 @@ const productSchema = new Schema({
     required: true,
     enum: ['for_sale', 'for_rent', 'service']
   },
+  syncLocationWithStoreAddress: {
+    type: Boolean,
+    required: true,
+    default: true
+  },
   administrativeAreaIds: {
     type: [Number], // [provinceId, cityId, districtId]
     required: true

@@ -17,9 +17,11 @@ const Specification = require('./Specification')
 const User = require('./User')
 const UserLoader = require('../dataloader/UserLoader')
 const Store = require('./Store')
+const Location = require('./Location')
 const StoreLoader = require('../dataloader/StoreLoader')
 const ProductCondition = require('./ProductCondition')
 const ProductConditionLoader = require('../dataloader/ProductConditionLoader')
+const AdministrativeAreaLoader = require('../dataloader/AdministrativeAreaLoader')
 
 module.exports = new GraphQLObjectType({
   name: 'Product',
@@ -71,6 +73,9 @@ module.exports = new GraphQLObjectType({
     isSuspended: {
       type: GraphQLBoolean
     },
+    syncLocationWithStoreAddress: {
+      type: GraphQLBoolean
+    },
     stock: {
       type: GraphQLInt
     },
@@ -86,6 +91,17 @@ module.exports = new GraphQLObjectType({
     },
     specs: {
       type: new GraphQLList(Specification)
+    },
+    location: {
+      type: Location,
+      resolve: async root => {
+        const [provinceId, cityId, districtId] = root.administrativeAreaIds
+        return {
+          provinceId,
+          cityId,
+          districtId
+        }
+      }
     }
   }
 })
