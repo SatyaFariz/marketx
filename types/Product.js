@@ -102,6 +102,14 @@ module.exports = new GraphQLObjectType({
           districtId
         }
       }
+    },
+    createdAt: {
+      type: GraphQLString,
+      resolve: async root => root.createdAt.toISOString()
+    },
+    renewedAt: {
+      type: GraphQLString,
+      resolve: async root => root.renewedAt?.toISOString()
     }
   }
 })
