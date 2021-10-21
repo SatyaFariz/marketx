@@ -353,6 +353,7 @@ module.exports = new GraphQLObjectType({
               id 
             },
             {
+              id: [id],
               code,
               expiry: new Date(now.getTime() + 60 * 60000) // 60 minutes
             },
