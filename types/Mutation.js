@@ -867,11 +867,13 @@ module.exports = new GraphQLObjectType({
         whatsappNumber: { type: new GraphQLNonNull(GraphQLString) },
         address: { type: new GraphQLNonNull(AddressInput) }
       },
-      resolve: async (_, args, { session: { user }}) => {
+      resolve: async (_, { name, whatsappNumber, address }, { session: { user }}) => {
         if(user) {
           const store = await new StoreModel({
             merchantId: user.id,
-            ...args
+            name,
+            address,
+            whatsappNumber: getMobileNumberFormats(whatsappNumber)
           }).save()
 
           return {
@@ -935,7 +937,7 @@ module.exports = new GraphQLObjectType({
           const oldProfilePicture = store.profilePicture
 
           store.name = name
-          store.whatsappNumber = whatsappNumber
+          store.whatsappNumber = getMobileNumberFormats(whatsappNumber)
           store.address.fullAddress = address.fullAddress
           if(uploadedBanner)
             store.banner = uploadedBanner

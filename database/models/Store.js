@@ -11,7 +11,7 @@ const storeSchema = new Schema({
     trim: true
   },
   whatsappNumber: {
-    type: String,
+    type: [String],
     required: true,
     trim: true,
   },

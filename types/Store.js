@@ -1,5 +1,6 @@
 const {
   GraphQLID,
+  GraphQLList,
   GraphQLString,
   GraphQLBoolean,
   GraphQLObjectType,
@@ -18,11 +19,11 @@ module.exports = new GraphQLObjectType({
       type: GraphQLString,
     },
     whatsappNumber: {
-      type: GraphQLString
+      type: new GraphQLList(GraphQLString)
     },
     whatsappUrl: {
       type: GraphQLString,
-      resolve: root => `https://wa.me/${root.whatsappNumber}`
+      resolve: root => `https://wa.me/${root.whatsappNumber.find(n => !n.startsWith('0'))}`
     },
     merchantId: {
       type: GraphQLString
