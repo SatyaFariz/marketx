@@ -1,5 +1,5 @@
 const getMobileNumberFormats = (number) => {
-  const formats = [number]
+  const formats = [number.trim()]
   if(number.startsWith('0')) {
     formats.push(`62${number.slice(1)}`)
   } else if(number.startsWith('62')) {
