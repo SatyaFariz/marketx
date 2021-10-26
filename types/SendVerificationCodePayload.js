@@ -1,5 +1,7 @@
 const {
   GraphQLString,
+  GraphQLBoolean,
+  GraphQLList,
   GraphQLObjectType,
 } = require('graphql')
 
@@ -10,6 +12,15 @@ module.exports = new GraphQLObjectType({
   fields: {
     actionInfo: { 
       type: ActionInfo
+    },
+    emailOrNumber: {
+      type: new GraphQLList(GraphQLString)
+    },
+    isNumberNotRegisteredOnWhatsapp: {
+      type: GraphQLBoolean
+    },
+    isEmailOrNumberRegistered: {
+      type: GraphQLBoolean
     },
     cooldownExpiry: {
       type: GraphQLString,

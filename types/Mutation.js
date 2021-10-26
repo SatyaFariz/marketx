@@ -24,6 +24,7 @@ const ProductModel = require('../database/models/Product')
 const AttributeModel = require('../database/models/Attribute')
 const OtpCodeModel = require('../database/models/OtpCode')
 const VerificationModel = require('../database/models/Verification')
+const WhatsappVerificationModel = require('../database/models/WhatsappVerification')
 const StoreModel = require('../database/models/Store')
 const TokenModel = require('../database/models/Token')
 const ActionInfo = require('./ActionInfo')
@@ -41,6 +42,8 @@ const UpdateCategoryInput = require('./UpdateCategoryInput')
 const CreateAttributesPayload = require('./CreateAttributesPayload')
 const SpecificationFieldInput = require('./SpecificationFieldInput')
 const { bulkUpload, singleUpload } = require('../utils/upload')
+const getMobileNumberFormats = require('../utils/getMobileNumberFormats')
+const sendWhatsApp = require('../utils/sendWhatsApp')
 
 const telegramChatIds = [998703948]
 
@@ -344,10 +347,55 @@ module.exports = new GraphQLObjectType({
         id: { type: new GraphQLNonNull(GraphQLString) },
         action: { type: UserActionEnum }
       },
-      resolve: async (_, { id, action }) => {
+      resolve: async (_, { id, action }, { session: { user }}) => {
         const now = new Date()
-        if(isEmail(id)) {
-          const code = Math.floor(100000 + Math.random() * 900000).toString()
+        const code = Math.floor(100000 + Math.random() * 900000).toString()
+
+        if(user?.id && action === 'verify_whatsapp_number') {
+          const numberFormats = getMobileNumberFormats(id)
+          const message = `Kode verifikasi anda adalah: ${code}`
+          const number = numberFormats.find(n => !n.startsWith('0'))
+          const whatsappResult = await sendWhatsApp({ number, message })
+          const { numberRegistered } = whatsappResult
+
+          if(numberRegistered) {
+            await WhatsappVerificationModel.findOneAndUpdate(
+              { 
+                userId: user.id,
+                whatsappNumber: id
+              },
+              {
+                userId: user.id,
+                whatsappNumber: numberFormats,
+                code,
+                expiry: new Date(now.getTime() + 3 * 60000) // 3 minutes
+              },
+              {
+                new: true,
+                upsert: true
+              }
+            )
+
+            return {
+              actionInfo: {
+                hasError: false,
+                message: `Kami telah mengirimkan kode verifikasi. Mohon periksa pesan WhatsApp Anda.`
+              },
+              emailOrNumber: numberFormats,
+              isNumberNotRegisteredOnWhatsapp: false
+            }
+          } else {
+            return {
+              actionInfo: {
+                hasError: true,
+                message: numberRegistered === false ? 'Nomor ini tidak terdaftar di WhatsApp.' : 'Terjadi error.'
+              },
+              emailOrNumber: numberFormats,
+              isNumberNotRegisteredOnWhatsapp: numberRegistered === false
+            }
+          }
+          
+        } else if(isEmail(id)) {
           const verification = await VerificationModel.findOneAndUpdate(
             { 
               id 

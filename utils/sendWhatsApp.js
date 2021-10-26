@@ -10,7 +10,6 @@ const instance = axios.create({
 const sendWhatsApp = async ({ number, message }) => {
   try {
     const response = await instance.post(`/api/send?number=${number}&message=${message}`)
-    console.log(response)
     return response.data
   } catch (error) {
     console.error(error)

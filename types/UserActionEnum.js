@@ -13,6 +13,9 @@ module.exports = new GraphQLEnumType({
     },
     edit_profile: {
       value: 'edit_profile'
+    },
+    verify_whatsapp_number: {
+      value: 'verify_whatsapp_number'
     }
   }
 })
