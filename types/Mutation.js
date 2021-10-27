@@ -913,6 +913,7 @@ module.exports = new GraphQLObjectType({
         id: { type: new GraphQLNonNull(GraphQLString) },
         name: { type: new GraphQLNonNull(GraphQLString) },
         whatsappNumber: { type: new GraphQLNonNull(GraphQLString) },
+        whatsappVerificationCode: { type: GraphQLString },
         address: { type: new GraphQLNonNull(AddressInput) }
       },
       resolve: async (_, { id, name, whatsappNumber, address }, { session: { user }, req: { files }}) => {
