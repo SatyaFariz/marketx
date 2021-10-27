@@ -868,8 +868,26 @@ module.exports = new GraphQLObjectType({
         whatsappVerificationCode: { type: new GraphQLNonNull(GraphQLString) },
         address: { type: new GraphQLNonNull(AddressInput) }
       },
-      resolve: async (_, { name, whatsappNumber, address }, { session: { user }}) => {
+      resolve: async (_, { name, whatsappNumber, whatsappVerificationCode, address }, { session: { user }}) => {
         if(user) {
+          const verification = await WhatsappVerificationModel.findOne({ userId: user.id, whatsappNumber })
+
+          if(verification?.code !== whatsappVerificationCode) {
+            return {
+              actionInfo: {
+                hasError: true,
+                message: 'Kode verifikasi salah.'
+              }
+            }
+          } else if(new Date() > verification.expiry) {
+            return {
+              actionInfo: {
+                hasError: true,
+                message: 'Kode verifikasi sudah tidak berlaku.'
+              }
+            }
+          }
+
           const store = await new StoreModel({
             merchantId: user.id,
             name,
@@ -880,7 +898,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: 'Store created.'
+              message: 'Informasi bisnis anda telah disimpan.'
             },
             store
           }
