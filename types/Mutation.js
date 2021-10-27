@@ -935,7 +935,7 @@ module.exports = new GraphQLObjectType({
         whatsappVerificationCode: { type: GraphQLString },
         address: { type: new GraphQLNonNull(AddressInput) }
       },
-      resolve: async (_, { id, name, whatsappNumber, address }, { session: { user }, req: { files }}) => {
+      resolve: async (_, { id, name, whatsappNumber, whatsappVerificationCode, address }, { session: { user }, req: { files }}) => {
         if(user) {
           let banner = null
           let profilePicture = null
@@ -946,13 +946,36 @@ module.exports = new GraphQLObjectType({
               profilePicture = files[i]
           }
 
+          const store = await StoreModel.findById(id)
+          if(!store.whatsappNumber.includes(whatsappNumber.trim())) {
+            if(!whatsappVerificationCode) {
+              throw new Error('Verification code needed.')
+            } else {
+              const verification = await WhatsappVerificationModel.findOne({ userId: user.id, whatsappNumber })
+              if(verification?.code !== whatsappVerificationCode) {
+                return {
+                  actionInfo: {
+                    hasError: true,
+                    message: 'Kode verifikasi salah.'
+                  }
+                }
+              } else if(new Date() > verification.expiry) {
+                return {
+                  actionInfo: {
+                    hasError: true,
+                    message: 'Kode verifikasi sudah tidak berlaku.'
+                  }
+                }
+              }
+            }
+          }
+
           const data = await Promise.all([
-            StoreModel.findById(id),
             banner ? singleUpload(banner) : null,
             profilePicture ? singleUpload(profilePicture) : null
           ])
           
-          const [store, uploadedBanner, uploadedProfilePicture] = data
+          const [uploadedBanner, uploadedProfilePicture] = data
           const oldBanner = store.banner
           const oldProfilePicture = store.profilePicture
 
@@ -1028,7 +1051,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: 'Store has been updated.'
+              message: 'Informasi bisnis anda telah di-update.'
             },
             store: updatedStore
           }
