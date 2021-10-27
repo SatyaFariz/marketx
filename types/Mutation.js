@@ -865,6 +865,7 @@ module.exports = new GraphQLObjectType({
       args: {
         name: { type: new GraphQLNonNull(GraphQLString) },
         whatsappNumber: { type: new GraphQLNonNull(GraphQLString) },
+        whatsappVerificationCode: { type: new GraphQLNonNull(GraphQLString) },
         address: { type: new GraphQLNonNull(AddressInput) }
       },
       resolve: async (_, { name, whatsappNumber, address }, { session: { user }}) => {
