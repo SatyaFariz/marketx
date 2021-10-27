@@ -41,7 +41,8 @@ module.exports = async ({ q, limit, after, categoryId, published, storeId, user 
     if(isMongoId(q)) {
       query._id = q
     } else {
-      query['$text'] = { $search: q }
+      // query['$text'] = { $search: q, caseSensitive: false }
+      query.name = new RegExp(q, "gi")
     }
 
     if(after)
