@@ -20,6 +20,11 @@ const storeSchema = new Schema({
     required: true,
     unique: true
   },
+  isForBusiness: {
+    type: Boolean,
+    default: false,
+    required: true
+  },
   address: {
     type: addressSchema
   },

@@ -866,9 +866,10 @@ module.exports = new GraphQLObjectType({
         name: { type: new GraphQLNonNull(GraphQLString) },
         whatsappNumber: { type: new GraphQLNonNull(GraphQLString) },
         whatsappVerificationCode: { type: new GraphQLNonNull(GraphQLString) },
+        isForBusiness: { type: new GraphQLNonNull(GraphQLBoolean) },
         address: { type: new GraphQLNonNull(AddressInput) }
       },
-      resolve: async (_, { name, whatsappNumber, whatsappVerificationCode, address }, { session: { user }}) => {
+      resolve: async (_, { name, whatsappNumber, whatsappVerificationCode, isForBusiness, address }, { session: { user }}) => {
         if(user) {
           const verification = await WhatsappVerificationModel.findOne({ userId: user.id, whatsappNumber })
 
@@ -892,6 +893,7 @@ module.exports = new GraphQLObjectType({
             merchantId: user.id,
             name,
             address,
+            isForBusiness,
             whatsappNumber: getMobileNumberFormats(whatsappNumber)
           }).save()
 
