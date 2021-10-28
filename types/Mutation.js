@@ -1762,6 +1762,7 @@ module.exports = new GraphQLObjectType({
       args: {
         title: { type: new GraphQLNonNull(GraphQLString) },
         content: { type: new GraphQLNonNull(GraphQLString) },
+        isPublished: { type: new GraphQLNonNull(GraphQLBoolean ) },
         type: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: async (_, args, { session: { user }}) => {

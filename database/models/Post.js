@@ -15,6 +15,11 @@ const postSchema = new Schema({
   type: {
     type: String
   },
+  isPublished: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
   lastUpdatedBy: {
     type: Schema.ObjectId,
     required: true

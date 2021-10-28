@@ -189,7 +189,12 @@ module.exports = new GraphQLObjectType({
         type: { type: new GraphQLNonNull(PostTypeEnum) },
         limit: { type: new GraphQLNonNull(GraphQLInt) }
       },
-      resolve: async (_, { limit, type }) => await PostModel.find({ type }, null, { limit })
+      resolve: async (_, { limit, type }, { session: { user }}) => {
+        const query = { type, isPublished: true }
+        if(user?.isAdmin) delete query.isPublished
+        
+        return await PostModel.find(query, null, { limit })
+      }
     }
   }
 })
