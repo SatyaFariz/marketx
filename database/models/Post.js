@@ -12,6 +12,10 @@ const postSchema = new Schema({
     required: true,
     trim: true,
   },
+  draft: {
+    type: String,
+    trim: true,
+  },
   type: {
     type: String
   },
