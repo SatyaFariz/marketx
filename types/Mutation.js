@@ -28,6 +28,7 @@ const WhatsappVerificationModel = require('../database/models/WhatsappVerificati
 const StoreModel = require('../database/models/Store')
 const TokenModel = require('../database/models/Token')
 const ActionInfo = require('./ActionInfo')
+const ActionOnPostPayload = require('./ActionOnPostPayload')
 const UserActionEnum = require('./UserActionEnum')
 const SendVerificationCodePayload = require('./SendVerificationCodePayload')
 const ActionOnUserPayload = require('./ActionOnUserPayload')
@@ -1895,6 +1896,39 @@ module.exports = new GraphQLObjectType({
           return {
             hasError: false,
             message: 'Product renewed sucessfully.'
+          }
+        }
+      }
+    },
+    publishPost: {
+      type: ActionOnPostPayload,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLString) },
+        content: { type: new GraphQLNonNull(GraphQLString) }
+      },
+      resolve: async (_, { id, content }, { session: { user }}) => {
+        if(user?.isAdmin) {
+          const lastUpdatedBy = user.id
+          const post = await PostModel.findOneAndUpdate(
+            {
+              _id: id
+            },
+            {
+              lastUpdatedBy,
+              content,
+              isPublished: true
+            },
+            {
+              new: true
+            }
+          )
+
+          return {
+            actionInfo: {
+              hasError: false,
+              message: 'Post updated'
+            },
+            post
           }
         }
       }
