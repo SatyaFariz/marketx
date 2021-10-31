@@ -1,6 +1,7 @@
 const {
   GraphQLID,
   GraphQLString,
+  GraphQLBoolean,
   GraphQLObjectType,
 } = require('graphql')
 
@@ -18,6 +19,9 @@ module.exports = new GraphQLObjectType({
     },
     draft: {
       type: GraphQLString
+    },
+    isDeleted: {
+      type: GraphQLBoolean
     },
     type: {
       type: GraphQLString

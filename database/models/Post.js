@@ -24,6 +24,11 @@ const postSchema = new Schema({
     required: true,
     default: false
   },
+  isDeleted: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
   lastUpdatedBy: {
     type: Schema.ObjectId,
     required: true

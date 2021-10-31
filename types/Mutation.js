@@ -1910,20 +1910,27 @@ module.exports = new GraphQLObjectType({
       type: ActionOnPostPayload,
       args: {
         id: { type: new GraphQLNonNull(GraphQLString) },
+        title: { type: GraphQLString },
         content: { type: new GraphQLNonNull(GraphQLString) }
       },
-      resolve: async (_, { id, content }, { session: { user }}) => {
+      resolve: async (_, { id, content, title }, { session: { user }}) => {
         if(user?.isAdmin) {
           const lastUpdatedBy = user.id
+          const updateProps = {
+            lastUpdatedBy,
+            content,
+            isPublished: true
+          }
+
+          if(title?.trim()?.length > 0) {
+            updateProps.title = title
+          }
+
           const post = await PostModel.findOneAndUpdate(
             {
               _id: id
             },
-            {
-              lastUpdatedBy,
-              content,
-              isPublished: true
-            },
+            updateProps,
             {
               new: true
             }
@@ -1933,6 +1940,38 @@ module.exports = new GraphQLObjectType({
             actionInfo: {
               hasError: false,
               message: 'Post updated'
+            },
+            post
+          }
+        }
+      }
+    },
+    deletePost: {
+      type: ActionOnPostPayload,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLString) }
+      },
+      resolve: async (_, { id }, { session: { user }}) => {
+        if(user?.isAdmin) {
+          const lastUpdatedBy = user.id
+
+          const post = await PostModel.findOneAndUpdate(
+            {
+              _id: id
+            },
+            {
+              lastUpdatedBy,
+              isDeleted: true
+            },
+            {
+              new: true
+            }
+          )
+
+          return {
+            actionInfo: {
+              hasError: false,
+              message: 'Post deleted.'
             },
             post
           }
