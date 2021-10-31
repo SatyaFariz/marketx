@@ -1759,7 +1759,7 @@ module.exports = new GraphQLObjectType({
       }
     },
     createPost: {
-      type: GraphQLString,
+      type: ActionOnPostPayload,
       args: {
         title: { type: new GraphQLNonNull(GraphQLString) },
         content: { type: new GraphQLNonNull(GraphQLString) },
@@ -1769,8 +1769,14 @@ module.exports = new GraphQLObjectType({
       resolve: async (_, args, { session: { user }}) => {
         if(user) {
           const post = new PostModel({ ...args, lastUpdatedBy: user.id })
-          await post.save()
-          return 'created'
+          
+          return {
+            actionInfo: {
+              hasError: false,
+              message: 'FAQ created.'
+            },
+            post: await post.save()
+          }
         }
       }
     },
