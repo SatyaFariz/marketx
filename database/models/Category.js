@@ -82,6 +82,9 @@ const categorySchema = new Schema({
       numberOfLines: {
         type: Number
       },
+      maxLength: {
+        type: Number
+      },
       options: {
         type: [String]
       },
