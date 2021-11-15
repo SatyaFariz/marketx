@@ -227,14 +227,14 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: true,
-              message: 'This number is not registered in our system yet.'
+              message: 'Nomor ini tidak terdaftar di sistem kami.'
             }
           }
         } else if((user && action === 'register') || (user && action === 'edit_profile')) {
           return {
             actionInfo: {
               hasError: true,
-              message: 'This number has already been registered.'
+              message: 'Nomor ini sudah terdaftar.'
             }
           }
         } else if(otp) {
@@ -244,14 +244,14 @@ module.exports = new GraphQLObjectType({
             return {
               actionInfo: {
                 hasError: true,
-                message: `You can only send OTP code up to ${maxAttemptsPerDay} times within 24 hours.`
+                message: `Anda hanya bisa mengirim kode OTP sebanyak ${maxAttemptsPerDay} kali dalam 24 jam.`
               }
             }
           } else if(now < otp.cooldownExpiry) {
             return {
               actionInfo: {
                 hasError: true,
-                message: `You have 1 minute until you can resend another OTP code.`
+                message: `Anda harus menunggu 1 menit hingga bisa mengirim kode OTP lagi.`
               }
             }
           } else {
@@ -274,7 +274,7 @@ module.exports = new GraphQLObjectType({
             return {
               actionInfo: {
                 hasError: false,
-                message: `We have sent 4-digit OTP code to your number.`
+                message: `Kami telah mengirim kode OTP 4 digit ke nomor Anda.`
               },
               expiry: newOtp.expiry,
               cooldownExpiry: newOtp.cooldownExpiry
@@ -298,7 +298,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: `We have sent 4-digit OTP code to your number.`
+              message: `Kami telah mengirim kode OTP 4 digit ke nomor Anda.`
             },
             expiry: newOtp.expiry,
             cooldownExpiry: newOtp.cooldownExpiry
@@ -321,7 +321,7 @@ module.exports = new GraphQLObjectType({
             if(await bcrypt.compare(newPassword, loggedUser.password)) {
               return {
                 hasError: true,
-                message: 'New password must be different from your current password.'
+                message: 'Kata sandi baru harus berbeda dari kata sandi Anda yang sekarang.'
               }
             }
             
@@ -330,13 +330,13 @@ module.exports = new GraphQLObjectType({
 
             return {
               hasError: false,
-              message: 'Password successfully changed.'
+              message: 'Kata sandi berhasil diubah.'
             }
           }
 
           return {
             hasError: true,
-            message: "Current password doesn't match your password."
+            message: "Kata sandi tidak cocok dengan kata sandi Anda yang sekarang."
           }
         }
       }
@@ -423,8 +423,8 @@ module.exports = new GraphQLObjectType({
           const mailOptions = {
             from: process.env.GMAIL,
             to: id,
-            subject: 'Email Confirmation Code',
-            text: `This is your email confirmation code: ${code}`
+            subject: 'Kode Verifikasi Email',
+            text: `Kode verifikasi email Anda adalah: ${code}`
           }
           
           transporter.sendMail(mailOptions, function(error, info){
@@ -439,7 +439,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: `We have sent ${verification.code.length} digit code to ${id}`
+              message: `Kami telah mengirim kode ${verification.code.length} digit ke ${id}`
             }
           }
         }
@@ -456,7 +456,7 @@ module.exports = new GraphQLObjectType({
         if(!user) {
           return {
             hasError: true,
-            message: 'This email is not registered in our system yet.'
+            message: 'Email ini tidak terdaftar di sistem kami.'
           }
         }
 
@@ -492,11 +492,11 @@ module.exports = new GraphQLObjectType({
         const mailOptions = {
           from: process.env.GMAIL,
           to: email,
-          subject: 'Reset Password Instruction',
+          subject: 'Instruksi Atur Ulang Kata Sandi',
           // text: `This is your email confirmation code: ${code}`,
           html: `
             <div>
-              <p>Follow this link to reset your password:</p>
+              <p>Klik link di bawah untuk mengatur ulang kata sandi:</p>
               <p>
                 <a href="${link}">${link}</a>
               </p>
@@ -514,7 +514,7 @@ module.exports = new GraphQLObjectType({
 
         return {
           hasError: false,
-          message: `We have send a password reset link to ${email}.`
+          message: `Kami telah mengirim link untuk mengatur ulang kata sandi Anda ke ${email}.`
         }
       }
     },
@@ -531,12 +531,12 @@ module.exports = new GraphQLObjectType({
         if(!userToken || !(await bcrypt.compare(token, userToken.token))) {
           return {
             hasError: true,
-            message: 'Invalid token.'
+            message: 'Token tidak valid.'
           }
         } else if(new Date > userToken.expiry) {
           return {
             hasError: true,
-            message: 'Token has expired.'
+            message: 'Token sudah tidak berlaku.'
           }
         }
 
@@ -551,7 +551,7 @@ module.exports = new GraphQLObjectType({
 
         return {
           hasError: false,
-          message: 'Password has been updated.'
+          message: 'Kata sandi telah diubah.'
         }
       }
     },
@@ -570,14 +570,14 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: true,
-              message: 'Verification code is not valid.'
+              message: 'Kode verifikasi tidak valid.'
             }
           }
         } else if(new Date() > verification.expiry) {
           return {
             actionInfo: {
               hasError: true,
-              message: 'Verification code has expired.'
+              message: 'Kode verifikasi sudah tidak berlaku.'
             }
           }
         }
@@ -598,7 +598,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: 'Register successful.'
+              message: `Halo ${name}, selamat bergabung di Market X.`
             },
             user
           }
@@ -607,7 +607,7 @@ module.exports = new GraphQLObjectType({
             return {
               actionInfo: {
                 hasError: true,
-                message: 'This email has already been registered.'
+                message: 'Email ini sudah terdaftar.'
               }
             }
           }
@@ -627,14 +627,14 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: true,
-              message: 'Account not found.'
+              message: 'Akun tidak ditemukan.'
             }
           }
         } else if(!(await bcrypt.compare(password, user.password))) {
           return {
             actionInfo: {
               hasError: true,
-              message: 'Invalid email - password combination.'
+              message: 'Kombinasi email dan kata sandi salah.'
             }
           }
         }
@@ -651,7 +651,7 @@ module.exports = new GraphQLObjectType({
         return {
           actionInfo: {
             hasError: false,
-            message: 'Login successful.'
+            message: `Halo ${user.name}, selamat datang kembali di Market X`
           },
           user
         }
@@ -676,14 +676,14 @@ module.exports = new GraphQLObjectType({
             return {
               actionInfo: {
                 hasError: true,
-                message: 'Invalid OTP code.'
+                message: 'Kode OTP tidak valid.'
               }
             }
           } else if(new Date() > otp.expiry) {
             return {
               actionInfo: {
                 hasError: true,
-                message: 'OTP code has expired.'
+                message: 'Kode OTP sudah tidak berlaku.'
               }
             }
           } else {
@@ -697,7 +697,7 @@ module.exports = new GraphQLObjectType({
             return {
               actionInfo: {
                 hasError: false,
-                message: 'Login successful.'
+                message: 'Selamat datang kembali di Market X.'
               }
             }
           }
@@ -705,7 +705,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: true,
-              message: 'User not found.'
+              message: 'Akun tidak ditemukan.'
             }
           }
         }
@@ -726,14 +726,14 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: true,
-              message: 'Invalid OTP code.'
+              message: 'Kode OTP tidak valid.'
             }
           }
         } else if(new Date() > otp.expiry) {
           return {
             actionInfo: {
               hasError: true,
-              message: 'OTP code has expired.'
+              message: 'Kode OTP sudah tidak berlaku.'
             }
           }
         } else {
@@ -745,7 +745,7 @@ module.exports = new GraphQLObjectType({
               return {
                 actionInfo: {
                   hasError: true,
-                  message: 'This number has already been registered.'
+                  message: 'Nomor ini sudah terdaftar.'
                 }
               }
             }
@@ -763,7 +763,7 @@ module.exports = new GraphQLObjectType({
             return {
               actionInfo: {
                 hasError: false,
-                message: 'Register successful.'
+                message: `Halo ${name}, selamat bergabung di Market X.`
               }
             }
           }
@@ -803,14 +803,14 @@ module.exports = new GraphQLObjectType({
                 return {
                   actionInfo: {
                     hasError: true,
-                    message: 'Invalid OTP code.'
+                    message: 'Kode OTP tidak valid.'
                   }
                 }
               } else if(new Date() > otp.expiry) {
                 return {
                   actionInfo: {
                     hasError: true,
-                    message: 'OTP code has expired.'
+                    message: 'Kode OTP sudah tidak berlaku.'
                   }
                 }
               }
@@ -840,7 +840,7 @@ module.exports = new GraphQLObjectType({
               return {
                 actionInfo: {
                   hasError: true,
-                  message: 'This number has already been registered.'
+                  message: 'Nomor ini sudah terdaftar.'
                 }
               }
             }
@@ -853,7 +853,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: 'Profile updated.'
+              message: 'Profil berhasil di-update.'
             },
             user: savedUser
           }
@@ -901,7 +901,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: 'Informasi bisnis anda telah disimpan.'
+              message: 'Akun iklan Anda telah disimpan.'
             },
             store
           }
@@ -921,7 +921,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: 'Store address has been updated.'
+              message: 'Alamat berhasil di-update.'
             },
             store
           }
@@ -1033,7 +1033,7 @@ module.exports = new GraphQLObjectType({
               return {
                 actionInfo: {
                   hasError: true,
-                  message: 'Error updating store.'
+                  message: 'Terjadi error.'
                 }
               }
             }
@@ -1054,7 +1054,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: 'Informasi bisnis anda telah di-update.'
+              message: 'Akun iklan Anda telah di-update.'
             },
             store: updatedStore
           }
@@ -1144,7 +1144,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: 'Product updated.'
+              message: 'Iklan berhasil di-update.'
             },
             product: savedProduct
           }
@@ -1172,7 +1172,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: 'Product has been deleted.'
+              message: 'Iklan berhasil dihapus.'
             },
             product
           }
@@ -1201,7 +1201,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: 'Product has been updated.'
+              message: 'Iklan berhasil di-update.'
             },
             product
           }
@@ -1231,7 +1231,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: 'Product has been updated.'
+              message: 'Iklan berhasil di-update.'
             },
             product
           }
@@ -1260,7 +1260,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: 'Product has been updated.'
+              message: 'Iklan berhasil di-update.'
             },
             product
           }
@@ -1352,7 +1352,7 @@ module.exports = new GraphQLObjectType({
             return {
               actionInfo: {
                 hasError: false,
-                message: 'Product created.'
+                message: 'Iklan berhasil disimpan.'
               },
               product: savedProduct
             }
@@ -1366,7 +1366,7 @@ module.exports = new GraphQLObjectType({
             return {
               actionInfo: {
                 hasError: true,
-                message: 'Error creating product.'
+                message: 'Terjadi error.'
               },
               product
             }
@@ -1385,13 +1385,13 @@ module.exports = new GraphQLObjectType({
         if(user) {
           const product = await ProductModel.findById(id)
           let hasError = false
-          let message = 'Images deleted.'
+          let message = 'Foto berhasil dihapus.'
           const deletedIds = []
           product.images = product.images.filter((image, i) => {
             if(imageIds.includes(image._id)) {
               if(i === 0) {
                 hasError = true
-                message = 'Can not delete main image.'
+                message = 'Tidak bisa menghapus foto utama.'
                 return true
               } else {
                 deletedIds.push(image._id)
@@ -1458,7 +1458,7 @@ module.exports = new GraphQLObjectType({
             return {
               actionInfo: {
                 hasError: false,
-                message: 'Images uploaded.'
+                message: 'Foto berhasil di-upload.'
               },
               product: await product.save()
             }
@@ -1474,7 +1474,7 @@ module.exports = new GraphQLObjectType({
             return {
               actionInfo: {
                 hasError: true,
-                message: 'Error uploading images.'
+                message: 'Terjadi error.'
               }
             }
           }
@@ -1507,7 +1507,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: 'Main product image updated.'
+              message: 'Foto utama berhasil di-update.'
             },
             product: await product.save()
           }
@@ -1536,7 +1536,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: 'Profile picture updated.'
+              message: 'Foto profil berhasil di-update.'
             },
             user: savedUser
           }
@@ -1568,7 +1568,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: 'Profile picture updated.'
+              message: 'Foto profil berhasil di-update.'
             },
             store: savedStore
           }
@@ -1601,7 +1601,7 @@ module.exports = new GraphQLObjectType({
           return {
             actionInfo: {
               hasError: false,
-              message: 'Profile picture updated.'
+              message: 'Banner berhasil di-update.'
             },
             store: savedStore
           }
@@ -1901,7 +1901,7 @@ module.exports = new GraphQLObjectType({
 
           return {
             hasError: false,
-            message: 'Product renewed sucessfully.'
+            message: 'Iklan telah diperbarui.'
           }
         }
       }
