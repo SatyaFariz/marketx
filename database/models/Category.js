@@ -46,6 +46,9 @@ const categorySchema = new Schema({
     required: true,
     default: []
   },
+  rentalDurationIds: {
+    type: [Schema.ObjectId],
+  },
   requiresProductCondition: {
     type: Boolean
   },

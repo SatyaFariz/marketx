@@ -63,6 +63,9 @@ const Category = new GraphQLObjectType({
     },
     specFields: {
       type: new GraphQLList(SpecificationField)
+    },
+    rentalDurationIds: {
+      type: new GraphQLList(GraphQLString)
     }
   })
 })
