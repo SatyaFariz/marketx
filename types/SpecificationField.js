@@ -55,6 +55,12 @@ module.exports = new GraphQLObjectType({
     },
     suffix: {
       type: GraphQLString
+    },
+    emptyErrorMessage: {
+      type: GraphQLString
+    },
+    helperText: {
+      type: GraphQLString
     }
   }
 })

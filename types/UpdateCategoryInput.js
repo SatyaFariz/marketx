@@ -29,6 +29,9 @@ module.exports = new GraphQLInputObjectType({
     forceLocationInput: { 
       type: GraphQLBoolean
     },
+    rentalDurationIds: {
+      type: new GraphQLList(GraphQLString)
+    },
     specFields: {
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SpecificationFieldInput)))
     }

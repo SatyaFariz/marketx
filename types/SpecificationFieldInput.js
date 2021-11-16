@@ -49,6 +49,12 @@ module.exports = new GraphQLInputObjectType({
     },
     suffix: {
       type: GraphQLString
+    },
+    emptyErrorMessage: {
+      type: GraphQLString
+    },
+    helperText: {
+      type: GraphQLString
     }
   }
 })

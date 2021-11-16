@@ -76,6 +76,12 @@ const categorySchema = new Schema({
       suffix: {
         type: String
       },
+      emptyErrorMessage: {
+        type: String
+      },
+      helperText: {
+        type: String
+      },
       max: {
         type: Number
       },
