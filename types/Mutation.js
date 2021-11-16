@@ -1796,6 +1796,7 @@ module.exports = new GraphQLObjectType({
           cat.forceLocationInput = input.forceLocationInput
           cat.showsProductConditionField = input.showsProductConditionField
           cat.requiresProductCondition = !input.showsProductConditionField ? false : input.requiresProductCondition
+          cat.rentalDurationIds = input.rentalDurationIds
           cat.isPublished = input.isPublished
           cat.specFields = input.specFields
           cat.lastUpdatedBy = user.id
