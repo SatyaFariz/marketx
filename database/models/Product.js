@@ -118,7 +118,17 @@ const productSchema = new Schema({
   },
   renewedAt: {
     type: Date
-  }
+  },
+  views: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+  leads: {
+    type: Number,
+    required: true,
+    default: 0
+  },
 }, { timestamps: true })
 
 const Product = model('Product', productSchema)

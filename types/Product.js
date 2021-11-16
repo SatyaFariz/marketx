@@ -110,6 +110,12 @@ module.exports = new GraphQLObjectType({
     renewedAt: {
       type: GraphQLString,
       resolve: async root => root.renewedAt?.toISOString()
-    }
+    },
+    views: {
+      type: GraphQLInt
+    },
+    leads: {
+      type: GraphQLInt
+    },
   }
 })
