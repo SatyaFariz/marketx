@@ -1978,6 +1978,62 @@ module.exports = new GraphQLObjectType({
           }
         }
       }
+    },
+    incrementViews: {
+      type: ActionOnProductPayload,
+      args: {
+        productId: { type: new GraphQLNonNull(GraphQLString ) }
+      },
+      resolve: async (_, { productId }, { req }) => {
+        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+        console.log('IP', ip)
+        console.log('PRODUCT ID', productId)
+        // console.log(req)
+        const _id = mongoose.Types.ObjectId(productId)
+        const product = ProductModel.findByIdAndUpdate(
+          _id,
+          {
+            $inc: { views: 1 }
+          },
+          {
+            new: true
+          }
+        )
+        return {
+          actionInfo: {
+            hasError: false
+          },
+          product
+        }
+      }
+    },
+    incrementLeads: {
+      type: ActionOnProductPayload,
+      args: {
+        productId: { type: new GraphQLNonNull(GraphQLString ) }
+      },
+      resolve: async (_, { productId }, { req }) => {
+        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+        console.log('IP', ip)
+        console.log('PRODUCT ID', productId)
+        // console.log(req)
+        const _id = mongoose.Types.ObjectId(productId)
+        const product = ProductModel.findByIdAndUpdate(
+          _id,
+          {
+            $inc: { leads: 1 }
+          },
+          {
+            new: true
+          }
+        )
+        return {
+          actionInfo: {
+            hasError: false
+          },
+          product
+        }
+      }
     }
   }
 })
