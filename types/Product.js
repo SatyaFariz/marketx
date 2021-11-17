@@ -53,6 +53,10 @@ module.exports = new GraphQLObjectType({
         return await Promise.all(root.category.map(id => CategoryLoader.load(id)))
       }
     },
+    merchantId: {
+      type: GraphQLString,
+      resolve: async root => root.merchantId
+    },
     merchant: {
       type: User,
       resolve: async root => await UserLoader.load(root.merchantId)
