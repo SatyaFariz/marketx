@@ -27,6 +27,7 @@ const VerificationModel = require('../database/models/Verification')
 const WhatsappVerificationModel = require('../database/models/WhatsappVerification')
 const StoreModel = require('../database/models/Store')
 const TokenModel = require('../database/models/Token')
+const ViewModel = require('../database/models/View')
 const ActionInfo = require('./ActionInfo')
 const ActionOnPostPayload = require('./ActionOnPostPayload')
 const UserActionEnum = require('./UserActionEnum')
@@ -1984,27 +1985,45 @@ module.exports = new GraphQLObjectType({
       args: {
         productId: { type: new GraphQLNonNull(GraphQLString ) }
       },
-      resolve: async (_, { productId }, { req }) => {
-        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
-        console.log('IP', ip)
-        console.log('PRODUCT ID', productId)
-        // console.log(req)
-        const _id = mongoose.Types.ObjectId(productId)
-        const product = ProductModel.findByIdAndUpdate(
-          _id,
-          {
-            $inc: { views: 1 }
-          },
-          {
-            new: true
+      resolve: async (_, { productId }, { req, session: { user }}) => {
+        const id = user?.id || req.headers['x-forwarded-for'] || req.socket.remoteAddress
+        const _productId = mongoose.Types.ObjectId(productId)
+        if(id) {
+          const session = await ViewModel.startSession()
+          session.startTransaction()
+          try {
+            const newView = new ViewModel({
+              id,
+              productId
+            })
+            await newView.save({ session })
+            
+            const product = await ProductModel.findByIdAndUpdate(
+              _productId,
+              {
+                $inc: { views: 1 }
+              },
+              {
+                new: true,
+                session: session
+              }
+            )
+
+            await session.commitTransaction()
+            session.endSession()
+            
+            return {
+              actionInfo: {
+                hasError: false
+              },
+              product
+            }
+          } catch(e) {
+            await session.abortTransaction()
+            session.endSession()
           }
-        )
-        return {
-          actionInfo: {
-            hasError: false
-          },
-          product
         }
+        return null
       }
     },
     incrementLeads: {
@@ -2012,10 +2031,8 @@ module.exports = new GraphQLObjectType({
       args: {
         productId: { type: new GraphQLNonNull(GraphQLString ) }
       },
-      resolve: async (_, { productId }, { req }) => {
+      resolve: async (_, { productId }, { req, session: { user }}) => {
         const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
-        console.log('IP', ip)
-        console.log('PRODUCT ID', productId)
         // console.log(req)
         const _id = mongoose.Types.ObjectId(productId)
         const product = ProductModel.findByIdAndUpdate(

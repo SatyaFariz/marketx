@@ -37,9 +37,9 @@ const whatsappVerificationSchema = new Schema({
   }
 }, { timestamps: true })
 
-const WhatsappVerification = model('WhatsappVerification', whatsappVerificationSchema)
-
 // just in case we want to add multiple whatsapp numbers functionality
 whatsappVerificationSchema.index({ userId: 1, whatsappNumber: 1 }, { unique: true })
+
+const WhatsappVerification = model('WhatsappVerification', whatsappVerificationSchema)
 
 module.exports = WhatsappVerification
