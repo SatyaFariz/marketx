@@ -1998,9 +1998,13 @@ module.exports = new GraphQLObjectType({
               productId
             })
             await newView.save({ session })
+
+            const query = { _id: _productId }
+            if(user?.storeId)
+              query.storeId = { $ne: mongoose.Types.ObjectId(user.storeId) }
             
-            const product = await ProductModel.findByIdAndUpdate(
-              _productId,
+            const product = await ProductModel.findOneAndUpdate(
+              query,
               {
                 $inc: { views: 1 }
               },
@@ -2009,8 +2013,13 @@ module.exports = new GraphQLObjectType({
                 session: session
               }
             )
-
-            await session.commitTransaction()
+            
+            if(!product) {
+              await session.abortTransaction()
+            } else {
+              await session.commitTransaction()
+            }
+            
             session.endSession()
             
             return {
@@ -2045,8 +2054,12 @@ module.exports = new GraphQLObjectType({
             })
             await newLead.save({ session })
             
-            const product = await ProductModel.findByIdAndUpdate(
-              _productId,
+            const query = { _id: _productId }
+            if(user?.storeId)
+              query.storeId = { $ne: mongoose.Types.ObjectId(user.storeId) }
+
+            const product = await ProductModel.findOneAndUpdate(
+              query,
               {
                 $inc: { leads: 1 }
               },
@@ -2056,7 +2069,12 @@ module.exports = new GraphQLObjectType({
               }
             )
 
-            await session.commitTransaction()
+            if(!product) {
+              await session.abortTransaction()
+            } else {
+              await session.commitTransaction()
+            }
+            
             session.endSession()
             
             return {
