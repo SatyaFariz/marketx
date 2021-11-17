@@ -1989,7 +1989,7 @@ module.exports = new GraphQLObjectType({
       resolve: async (_, { productId }, { req, session: { user }}) => {
         const id = user?.id || req.headers['x-forwarded-for'] || req.socket.remoteAddress
         const _productId = mongoose.Types.ObjectId(productId)
-        if(id) {
+        if(id && !user?.isAdmin) {
           const session = await ViewModel.startSession()
           session.startTransaction()
           try {
@@ -2044,7 +2044,7 @@ module.exports = new GraphQLObjectType({
       resolve: async (_, { productId }, { req, session: { user }}) => {
         const id = user?.id || req.headers['x-forwarded-for'] || req.socket.remoteAddress
         const _productId = mongoose.Types.ObjectId(productId)
-        if(id) {
+        if(id && !user?.isAdmin) {
           const session = await LeadModel.startSession()
           session.startTransaction()
           try {
