@@ -2054,7 +2054,10 @@ module.exports = new GraphQLObjectType({
             })
             await newLead.save({ session })
             
-            const query = { _id: _productId }
+            const query = { 
+              _id: _productId,
+              views: { $gt: 0 }
+            }
             if(user?.storeId)
               query.storeId = { $ne: mongoose.Types.ObjectId(user.storeId) }
 
@@ -2074,7 +2077,7 @@ module.exports = new GraphQLObjectType({
             } else {
               await session.commitTransaction()
             }
-            
+
             session.endSession()
             
             return {
