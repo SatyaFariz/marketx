@@ -67,6 +67,10 @@ module.exports = new GraphQLObjectType({
         return null
       }
     },
+    myId: {
+      type: GraphQLString,
+      resolve: (_, __, { session: { user }}) => user?.id
+    },
     myStoreId: {
       type: GraphQLString,
       resolve: (_, __, { session: { user }}) => user?.storeId
