@@ -645,7 +645,7 @@ module.exports = new GraphQLObjectType({
         session.user = {
           id: user._id.toString(),
           isAdmin: user.isAdmin,
-          storeId: store?._id.toString()
+          storeId: store?._id?.toString()
         }
         telegramChatIds.forEach(id => {
           telegramBot.sendMessage(id, `${user.name} just signed in!!!`)

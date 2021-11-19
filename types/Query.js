@@ -67,6 +67,10 @@ module.exports = new GraphQLObjectType({
         return null
       }
     },
+    myStoreId: {
+      type: GraphQLString,
+      resolve: (_, __, { session: { user }}) => user?.storeId
+    },
     attributes: {
       type: new GraphQLList(Attribute),
       resolve: async () => {
