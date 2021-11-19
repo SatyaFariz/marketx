@@ -16,7 +16,6 @@ const Category = require('./Category')
 const CategoryModel = require('../database/models/Category')
 const Unit = require('./Unit')
 const UnitModel = require('../database/models/Unit')
-const UserSession = require('./UserSession')
 const User = require('./User')
 const UserModel = require('../database/models/User')
 const Product = require('./Product')
@@ -59,10 +58,6 @@ module.exports = new GraphQLObjectType({
         return user !== null
       }
     },
-    userSession: {
-      type: UserSession,
-      resolve: async (_, __, { session: { user }}) => user
-    },
     me: {
       type: User,
       resolve: async (_, __, { session: { user }}) => {
@@ -71,14 +66,6 @@ module.exports = new GraphQLObjectType({
 
         return null
       }
-    },
-    myId: {
-      type: GraphQLString,
-      resolve: (_, __, { session: { user }}) => user?.id
-    },
-    myStoreId: {
-      type: GraphQLString,
-      resolve: (_, __, { session: { user }}) => user?.storeId
     },
     attributes: {
       type: new GraphQLList(Attribute),

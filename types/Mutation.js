@@ -900,8 +900,6 @@ module.exports = new GraphQLObjectType({
             whatsappNumber: getMobileNumberFormats(whatsappNumber)
           }).save()
 
-          user.storeId = store._id.toString()
-
           return {
             actionInfo: {
               hasError: false,
