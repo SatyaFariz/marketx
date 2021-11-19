@@ -16,6 +16,7 @@ const Category = require('./Category')
 const CategoryModel = require('../database/models/Category')
 const Unit = require('./Unit')
 const UnitModel = require('../database/models/Unit')
+const UserSession = require('./UserSession')
 const User = require('./User')
 const UserModel = require('../database/models/User')
 const Product = require('./Product')
@@ -57,6 +58,10 @@ module.exports = new GraphQLObjectType({
         const user = await UserModel.findOne({ email })
         return user !== null
       }
+    },
+    userSession: {
+      type: UserSession,
+      resolve: async (_, __, { session: { user }}) => user
     },
     me: {
       type: User,
