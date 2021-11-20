@@ -13,16 +13,12 @@ services:
 
   mongo:
     volumes:
-      - staging_mongodata:/data/db
+      - /home/marketx_id/marketx_data_staging:/data/db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
-      MONGO_INITDB_DATABASE: rental_app
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
   
   mongo2:
     volumes: 
-      - staging_mongodata2:/data/db
-      
-volumes:
-  staging_mongodata:
-  staging_mongodata2:
+      - /home/marketx_id/marketx_data2_staging:/data/db
