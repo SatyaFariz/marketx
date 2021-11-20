@@ -49,6 +49,7 @@ const getMobileNumberFormats = require('../utils/getMobileNumberFormats')
 const sendWhatsApp = require('../utils/sendWhatsApp')
 
 const telegramChatIds = [998703948]
+const MAX_IMAGE_UPLOAD = 7
 
 module.exports = new GraphQLObjectType({
   name: 'Mutation',
@@ -1283,10 +1284,10 @@ module.exports = new GraphQLObjectType({
           try {
             const data = await Promise.all([
               CategoryModel.findById(categoryId),
-              StoreModel.findById(storeId),
-              bulkUpload(files.slice(0, 7)) // limit only 7 files
+              StoreModel.findById(storeId)
             ])
-            const [category, store, images] = data
+            const [category, store] = data
+            const images = await bulkUpload(files.slice(0, category.maxImageUpload || MAX_IMAGE_UPLOAD))
             if(images?.length > 0) {
               uploadedImageIds = images.map(image => image._id)
             }
@@ -1433,16 +1434,14 @@ module.exports = new GraphQLObjectType({
       },
       resolve: async (_, { id }, { session: { user }, req: { files }}) => {
         if(user && files) {
-          const data = await Promise.all([
-            ProductModel.findById(id),
-            bulkUpload(files)
-          ])
-
-          const [product, images] = data
+          const product = await ProductModel.findById(id)
+          const category = await CategoryModel.findById(product.category[product.category.length - 1])
+          const images = await bulkUpload(files)
+          const maxImageUpload = category.maxImageUpload || MAX_IMAGE_UPLOAD
           let idsToDelete = []
           
           for(let i = 0; i < images.length; i++) {
-            if(product.images.length < 7) {
+            if(product.images.length < maxImageUpload) {
               product.images.push(images[i])
               product.lastUpdatedBy = user.id
             } else {
