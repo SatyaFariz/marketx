@@ -3,6 +3,7 @@ const {
   GraphQLBoolean,
   GraphQLInputObjectType,
   GraphQLNonNull,
+  GraphQLInt,
   GraphQLList
 } = require('graphql')
 
@@ -28,6 +29,9 @@ module.exports = new GraphQLInputObjectType({
     },
     forceLocationInput: { 
       type: GraphQLBoolean
+    },
+    maxImageUpload: {
+      type: GraphQLInt
     },
     rentalDurationIds: {
       type: new GraphQLList(GraphQLString)

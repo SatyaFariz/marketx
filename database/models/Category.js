@@ -58,6 +58,9 @@ const categorySchema = new Schema({
   forceLocationInput: {
     type: Boolean
   },
+  maxImageUpload: {
+    type: Number
+  },
   specFields: {
     type: [new Schema({
       attributeId: {

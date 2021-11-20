@@ -30,6 +30,9 @@ const Category = new GraphQLObjectType({
     level: {
       type: GraphQLInt
     },
+    maxImageUpload: {
+      type: GraphQLInt
+    },
     isPublished: {
       type: GraphQLBoolean
     },

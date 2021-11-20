@@ -1795,6 +1795,7 @@ module.exports = new GraphQLObjectType({
           ])
           const [cat, uploadedImage] = data
           cat.name = input.name
+          cat.maxImageUpload = input.maxImageUpload
           cat.forceLocationInput = input.forceLocationInput
           cat.showsProductConditionField = input.showsProductConditionField
           cat.requiresProductCondition = !input.showsProductConditionField ? false : input.requiresProductCondition
