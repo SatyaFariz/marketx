@@ -20,7 +20,12 @@ const pubsub = require('./lib/pubsub')
 const graphqlEndpoint = '/graphql'
 const subscriptionEndpoint = '/subscriptions'
 
-mongoose.connect('mongodb://root:root@mongo:27017,mongo2:27017/rental_app?authSource=admin&replicaSet=rs0', {
+const dbUsername = process.env.MONGO_USERNAME
+const dbPwd = process.env.MONGO_PASSWORD
+const dbName = process.env.MONGO_DATABASE
+const mongoConnString = `mongodb://${dbUsername}:${dbPwd}@mongo:27017,mongo2:27017/${dbName}?authSource=admin&replicaSet=rs0`
+
+mongoose.connect(mongoConnString, {
   useNewUrlParser: true
 })
 
