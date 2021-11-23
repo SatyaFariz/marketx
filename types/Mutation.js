@@ -47,6 +47,7 @@ const SpecificationFieldInput = require('./SpecificationFieldInput')
 const { bulkUpload, singleUpload } = require('../utils/upload')
 const getMobileNumberFormats = require('../utils/getMobileNumberFormats')
 const sendWhatsApp = require('../utils/sendWhatsApp')
+const PivotFieldInput = require('./PivotFieldInput')
 
 const telegramChatIds = [998703948]
 const MAX_IMAGE_UPLOAD = 7
@@ -2092,6 +2093,18 @@ module.exports = new GraphQLObjectType({
           }
         }
         return null
+      }
+    },
+    setPivotField: {
+      type: GraphQLBoolean,
+      args: {
+        categoryId: { type: new GraphQLNonNull(GraphQLString) },
+        pivotField: { type: new GraphQLNonNull(PivotFieldInput) }
+      },
+      resolve: async (_, { categoryId, pivotField }) => {
+        const _id = mongoose.Types.ObjectId(categoryId)
+        await CategoryModel.updateOne({ _id }, { pivotField })
+        return true
       }
     }
   }

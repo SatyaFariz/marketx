@@ -9,6 +9,7 @@ const {
 
 const Image = require('./Image')
 const SpecificationField = require('./SpecificationField')
+const PivotField = require('./PivotField')
 const CategoryLoader = require('../dataloader/CategoryLoader')
 const SubcategoriesLoader = require('../dataloader/SubcategoriesLoader')
 
@@ -66,6 +67,9 @@ const Category = new GraphQLObjectType({
     },
     specFields: {
       type: new GraphQLList(SpecificationField)
+    },
+    pivotField: {
+      type: PivotField
     },
     rentalDurationIds: {
       type: new GraphQLList(GraphQLString)

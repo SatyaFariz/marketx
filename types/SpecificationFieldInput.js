@@ -55,6 +55,12 @@ module.exports = new GraphQLInputObjectType({
     },
     helperText: {
       type: GraphQLString
-    }
+    },
+    includePivotFieldOptionIds: {
+      type: new GraphQLList(new GraphQLNonNull(GraphQLString))
+    },
+    excludePivotFieldOptionIds: {
+      type: new GraphQLList(new GraphQLNonNull(GraphQLString))
+    },
   }
 })

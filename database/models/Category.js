@@ -61,6 +61,28 @@ const categorySchema = new Schema({
   maxImageUpload: {
     type: Number
   },
+  pivotField: {
+    type: new Schema({
+      attributeId: {
+        type: Schema.ObjectId,
+        required: true
+      },
+      options: {
+        type: [new Schema({
+          label: {
+            type: String,
+            required: true
+          },
+          desc: {
+            type: String
+          },
+          isDefault: {
+            type: Boolean
+          }
+        })]
+      }
+    })
+  },
   specFields: {
     type: [new Schema({
       attributeId: {
@@ -108,6 +130,12 @@ const categorySchema = new Schema({
       },
       isAutocomplete: {
         type: Boolean
+      },
+      includePivotFieldOptionIds: {
+        type: [Schema.ObjectId]
+      },
+      excludePivotFieldOptionIds: {
+        type: [Schema.ObjectId]
       }
     })],
     default: []
