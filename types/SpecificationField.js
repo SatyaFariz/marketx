@@ -23,6 +23,9 @@ module.exports = new GraphQLObjectType({
     isRequired: {
       type: GraphQLBoolean,
     },
+    isPublished: {
+      type: GraphQLBoolean,
+    },
     type: {
       type: GraphQLString
     },
