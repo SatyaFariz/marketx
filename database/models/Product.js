@@ -31,6 +31,9 @@ const productSchema = new Schema({
   category: {
     type: [Schema.ObjectId] // [categoryId, subcategoryId]
   },
+  pivotFieldOptionId: {
+    type: Schema.ObjectId
+  },
   storeId: {
     type: Schema.ObjectId,
     required: true

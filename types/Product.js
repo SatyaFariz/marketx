@@ -57,6 +57,9 @@ module.exports = new GraphQLObjectType({
       type: GraphQLString,
       resolve: async root => root.merchantId
     },
+    pivotFieldOptionId: {
+      type: GraphQLString
+    },
     merchant: {
       type: User,
       resolve: async root => await UserLoader.load(root.merchantId)

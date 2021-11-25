@@ -39,6 +39,9 @@ module.exports = new GraphQLInputObjectType({
     },
     productConditionId: {
       type: GraphQLString
-    }
+    },
+    pivotFieldOptionId: {
+      type: GraphQLString
+    },
   }
 })
