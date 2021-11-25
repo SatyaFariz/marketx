@@ -92,6 +92,9 @@ const categorySchema = new Schema({
       isRequired: {
         type: Boolean
       },
+      isPublished: {
+        type: Boolean
+      },
       type: {
         type: String
       },

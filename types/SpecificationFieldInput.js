@@ -23,6 +23,9 @@ module.exports = new GraphQLInputObjectType({
     isRequired: { 
       type: new GraphQLNonNull(GraphQLBoolean)
     },
+    isPublished: {
+      type: GraphQLBoolean
+    },
     isAutocomplete: {
       type: GraphQLBoolean
     },

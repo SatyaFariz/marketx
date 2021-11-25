@@ -66,7 +66,14 @@ const Category = new GraphQLObjectType({
       resolve: async (root) => await SubcategoriesLoader.load(root._id)
     },
     specFields: {
-      type: new GraphQLList(SpecificationField)
+      type: new GraphQLList(SpecificationField),
+      resolve: (root, __, { session: { user }}) => {
+        if(user?.isAdmin) {
+          return root.specFields
+        }
+
+        return root.specFields?.filter(field => field.isPublished)
+      }
     },
     pivotField: {
       type: PivotField
