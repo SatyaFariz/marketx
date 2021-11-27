@@ -2107,7 +2107,7 @@ module.exports = new GraphQLObjectType({
           const field = {
             ...pivotField,
             options: pivotField.options.map(item => ({
-              _id: item.id ? mongoose.Types.ObjectId(item.id) : mongoose.Types.ObjectId(),
+              _id: item.id?.length > 0 ? mongoose.Types.ObjectId(item.id) : mongoose.Types.ObjectId(),
               ...item
             }))
           }
