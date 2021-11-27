@@ -2096,15 +2096,34 @@ module.exports = new GraphQLObjectType({
       }
     },
     setPivotField: {
-      type: GraphQLBoolean,
+      type: ActionOnCategoryPayload,
       args: {
         categoryId: { type: new GraphQLNonNull(GraphQLString) },
         pivotField: { type: new GraphQLNonNull(PivotFieldInput) }
       },
-      resolve: async (_, { categoryId, pivotField }) => {
-        const _id = mongoose.Types.ObjectId(categoryId)
-        await CategoryModel.updateOne({ _id }, { pivotField })
-        return true
+      resolve: async (_, { categoryId, pivotField }, { session: { user }}) => {
+        if(user?.isAdmin) {
+          const _id = mongoose.Types.ObjectId(categoryId)
+          const field = {
+            ...pivotField,
+            options: pivotField.options.map(item => ({
+              _id: item.id ? mongoose.Types.ObjectId(item.id) : mongoose.Types.ObjectId(),
+              ...item
+            }))
+          }
+          const category = await CategoryModel.findOneAndUpdate(
+            { _id },
+            { pivotField: field, lastUpdatedBy: user.id },
+            { new: true }
+          )
+          return {
+            actionInfo: {
+              hasError: false,
+              message: 'Pivot field set.'
+            },
+            category
+          }
+        }
       }
     }
   }

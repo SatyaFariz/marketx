@@ -11,6 +11,9 @@ module.exports = new GraphQLInputObjectType({
     label: {
       type: new GraphQLNonNull(GraphQLString)
     },
+    id: {
+      type: GraphQLString
+    },
     isDefault: {
       type: GraphQLBoolean
     },
