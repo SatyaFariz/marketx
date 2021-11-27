@@ -67,6 +67,14 @@ const categorySchema = new Schema({
         type: Schema.ObjectId,
         required: true
       },
+      emptyErrorMessage: {
+        type: String,
+        trim: true
+      },
+      helperText: {
+        type: String,
+        trim: true
+      },
       options: {
         type: [new Schema({
           label: {

@@ -1,6 +1,7 @@
 const {
   GraphQLID,
   GraphQLList,
+  GraphQLString,
   GraphQLObjectType,
 } = require('graphql')
 
@@ -17,6 +18,12 @@ module.exports = new GraphQLObjectType({
     attribute: {
       type: Attribute,
       resolve: async root => await AttributeLoader.load(root.attributeId)
+    },
+    emptyErrorMessage: {
+      type: GraphQLString
+    },
+    helperText: {
+      type: GraphQLString
     },
     options: {
       type: new GraphQLList(PivotFieldOption)

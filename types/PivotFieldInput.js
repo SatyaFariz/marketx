@@ -1,6 +1,5 @@
 const {
   GraphQLString,
-  GraphQLBoolean,
   GraphQLList,
   GraphQLInputObjectType,
   GraphQLNonNull
@@ -13,6 +12,12 @@ module.exports = new GraphQLInputObjectType({
   fields: {
     attributeId: {
       type: new GraphQLNonNull(GraphQLString)
+    },
+    emptyErrorMessage: {
+      type: GraphQLString
+    },
+    helperText: {
+      type: GraphQLString
     },
     options: {
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(PivotFieldOptionInput)))
