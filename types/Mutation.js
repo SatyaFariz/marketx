@@ -49,7 +49,7 @@ const getMobileNumberFormats = require('../utils/getMobileNumberFormats')
 const sendWhatsApp = require('../utils/sendWhatsApp')
 const PivotFieldInput = require('./PivotFieldInput')
 
-const telegramChatIds = [998703948]
+const telegramChatIds = [parseInt(process.env.TELEGRAM_NOTIFICATION_CHAT_ID, 10)]
 const MAX_IMAGE_UPLOAD = 7
 
 module.exports = new GraphQLObjectType({
