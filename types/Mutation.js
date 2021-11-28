@@ -649,9 +649,11 @@ module.exports = new GraphQLObjectType({
           isAdmin: user.isAdmin,
           storeId: store?._id?.toString()
         }
-        telegramChatIds.forEach(id => {
-          telegramBot.sendMessage(id, `${user.name} just signed in!!!`)
-        })
+        if(!user.isAdmin) {
+          telegramChatIds.forEach(id => {
+            telegramBot.sendMessage(id, `${user.name} just signed in!!!`)
+          })
+        }
         return {
           actionInfo: {
             hasError: false,
