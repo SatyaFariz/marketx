@@ -425,7 +425,7 @@ module.exports = new GraphQLObjectType({
           })
           
           const makeid = (length) => {
-            const result           = ''
+            let result           = ''
             const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
             const charactersLength = characters.length
             for (const i = 0; i < length; i++) {
@@ -504,7 +504,7 @@ module.exports = new GraphQLObjectType({
         const link = `${process.env.APP_URL}/reset-password?id=${user._id.toString()}&token=${resetToken}`
         
         const makeid = (length) => {
-          const result           = ''
+          let result           = ''
           const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
           const charactersLength = characters.length
           for (const i = 0; i < length; i++) {
