@@ -424,8 +424,18 @@ module.exports = new GraphQLObjectType({
             }
           })
           
+          const makeid = (length) => {
+            const result           = ''
+            const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+            const charactersLength = characters.length
+            for (const i = 0; i < length; i++) {
+              result += characters.charAt(Math.floor(Math.random() * charactersLength))
+            }
+            return result
+          }
+
           const mailOptions = {
-            from: process.env.GMAIL,
+            from: `noreply_${makeid(8)}@marketx.id`,
             to: id,
             subject: 'Kode Verifikasi Email',
             text: `Kode verifikasi email Anda adalah: ${code}`
@@ -493,8 +503,18 @@ module.exports = new GraphQLObjectType({
 
         const link = `${process.env.APP_URL}/reset-password?id=${user._id.toString()}&token=${resetToken}`
         
+        const makeid = (length) => {
+          const result           = ''
+          const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+          const charactersLength = characters.length
+          for (const i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength))
+          }
+          return result
+        }
+
         const mailOptions = {
-          from: process.env.GMAIL,
+          from: `noreply_${makeid(8)}@marketx.id`,
           to: email,
           subject: 'Instruksi Atur Ulang Kata Sandi',
           // text: `This is your email confirmation code: ${code}`,
