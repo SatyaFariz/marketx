@@ -441,13 +441,17 @@ module.exports = new GraphQLObjectType({
             text: `Kode verifikasi email Anda adalah: ${code}`
           }
           
-          transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-              console.log(error)
-            } else {
-              console.log('Email sent: ' + info.response)
-            }
-          })
+          try {
+            transporter.sendMail(mailOptions, function(error, info){
+              if (error) {
+                console.log(error)
+              } else {
+                console.log('Email sent: ' + info.response)
+              }
+            })
+          } catch(e) {
+            console.log(e)
+          }
 
 
           return {
@@ -528,13 +532,17 @@ module.exports = new GraphQLObjectType({
           `
         }
         
-        transporter.sendMail(mailOptions, function(error, info){
-          if (error) {
-            console.log(error)
-          } else {
-            console.log('Email sent: ' + info.response)
-          }
-        })
+        try {
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error)
+            } else {
+              console.log('Email sent: ' + info.response)
+            }
+          })
+        } catch(e) {
+          console.log(e)
+        }
 
         return {
           hasError: false,
