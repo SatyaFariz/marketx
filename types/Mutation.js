@@ -2,6 +2,7 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLInt,
+  GraphQLFloat,
   GraphQLNonNull,
   GraphQLList,
   GraphQLBoolean
@@ -19,6 +20,7 @@ const telegramBot = require('../lib/telegram')
 
 const PostModel = require('../database/models/Post')
 const UserModel = require('../database/models/User')
+const UnitModel = require('../database/models/Unit')
 const CategoryModel = require('../database/models/Category')
 const ProductModel = require('../database/models/Product')
 const ProductConditionModel = require('../database/models/ProductCondition')
@@ -2182,6 +2184,19 @@ module.exports = new GraphQLObjectType({
         if(user?.isAdmin) {
           const reason = await new SuspensionReasonModel(args).save()
           return reason._id.toString()
+        }
+      }
+    },
+    createRentalDuration: {
+      type: GraphQLString,
+      args: {
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        value: { type: new GraphQLNonNull(GraphQLFloat) }
+      },
+      resolve: async (_, args, { session: { user }}) => {
+        if(user?.isAdmin) {
+          const duration = await new UnitModel(args).save()
+          return duration._id.toString()
         }
       }
     }
