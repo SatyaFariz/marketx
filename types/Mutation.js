@@ -21,6 +21,7 @@ const PostModel = require('../database/models/Post')
 const UserModel = require('../database/models/User')
 const CategoryModel = require('../database/models/Category')
 const ProductModel = require('../database/models/Product')
+const ProductConditionModel = require('../database/models/ProductCondition')
 const AttributeModel = require('../database/models/Attribute')
 const OtpCodeModel = require('../database/models/OtpCode')
 const VerificationModel = require('../database/models/Verification')
@@ -2153,6 +2154,20 @@ module.exports = new GraphQLObjectType({
             },
             category
           }
+        }
+      }
+    },
+    createProductCondition: {
+      type: GraphQLString,
+      args: {
+        isBrandNew: { type: new GraphQLNonNull(GraphQLBoolean) },
+        display: { type: new GraphQLNonNull(GraphQLString) },
+        desc: { type: GraphQLString }
+      },
+      resolve: async (_, args, { session: { user }}) => {
+        if(user?.isAdmin) {
+          const condition = await new ProductConditionModel(args).save()
+          return condition._id.toString()
         }
       }
     }
