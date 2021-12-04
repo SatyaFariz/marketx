@@ -7,8 +7,7 @@ const suspensionReasonSchema = new Schema({
     required: true
   },
   desc: {
-    type: String,
-    required: true,
+    type: String
   },
 }, { timestamps: true })
 

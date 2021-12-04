@@ -22,6 +22,7 @@ const UserModel = require('../database/models/User')
 const CategoryModel = require('../database/models/Category')
 const ProductModel = require('../database/models/Product')
 const ProductConditionModel = require('../database/models/ProductCondition')
+const SuspensionReasonModel = require('../database/models/SuspensionReason')
 const AttributeModel = require('../database/models/Attribute')
 const OtpCodeModel = require('../database/models/OtpCode')
 const VerificationModel = require('../database/models/Verification')
@@ -2168,6 +2169,19 @@ module.exports = new GraphQLObjectType({
         if(user?.isAdmin) {
           const condition = await new ProductConditionModel(args).save()
           return condition._id.toString()
+        }
+      }
+    },
+    createSuspensionReason: {
+      type: GraphQLString,
+      args: {
+        title: { type: new GraphQLNonNull(GraphQLString) },
+        desc: { type: GraphQLString }
+      },
+      resolve: async (_, args, { session: { user }}) => {
+        if(user?.isAdmin) {
+          const reason = await new SuspensionReasonModel(args).save()
+          return reason._id.toString()
         }
       }
     }
