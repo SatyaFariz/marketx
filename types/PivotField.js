@@ -1,6 +1,7 @@
 const {
   GraphQLID,
   GraphQLList,
+  GraphQLBoolean,
   GraphQLString,
   GraphQLObjectType,
 } = require('graphql')
