@@ -25,6 +25,9 @@ module.exports = new GraphQLObjectType({
     helperText: {
       type: GraphQLString
     },
+    showsInProductDetail: {
+      type: GraphQLBoolean
+    },
     options: {
       type: new GraphQLList(PivotFieldOption)
     }

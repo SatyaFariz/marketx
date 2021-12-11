@@ -75,6 +75,9 @@ const categorySchema = new Schema({
         type: String,
         trim: true
       },
+      showsInProductDetail: {
+        type: Boolean
+      },
       options: {
         type: [new Schema({
           label: {
