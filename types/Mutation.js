@@ -421,25 +421,15 @@ module.exports = new GraphQLObjectType({
           )
 
           const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            service: 'SendinBlue',
             auth: {
-              user: process.env.GMAIL,
-              pass: process.env.GMAIL_PASSWORD
+              user: process.env.SENDINBLUE_USER,
+              pass: process.env.SENDINBLUE_PASSWORD
             }
           })
-          
-          const makeid = (length) => {
-            let result           = ''
-            const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-            const charactersLength = characters.length
-            for (const i = 0; i < length; i++) {
-              result += characters.charAt(Math.floor(Math.random() * charactersLength))
-            }
-            return result
-          }
 
           const mailOptions = {
-            from: `noreply_${makeid(8)}@marketx.id`,
+            from: `Market X <noreply@marketx.id>`,
             to: id,
             subject: 'Kode Verifikasi Email',
             text: `Kode verifikasi email Anda adalah: ${code}`
@@ -502,27 +492,17 @@ module.exports = new GraphQLObjectType({
         )
 
         const transporter = nodemailer.createTransport({
-          service: 'gmail',
+          service: 'SendinBlue',
           auth: {
-            user: process.env.GMAIL,
-            pass: process.env.GMAIL_PASSWORD
+            user: process.env.SENDINBLUE_USER,
+            pass: process.env.SENDINBLUE_PASSWORD
           }
         })
 
         const link = `${process.env.APP_URL}/reset-password?id=${user._id.toString()}&token=${resetToken}`
-        
-        const makeid = (length) => {
-          let result           = ''
-          const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-          const charactersLength = characters.length
-          for (const i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength))
-          }
-          return result
-        }
-
+      
         const mailOptions = {
-          from: `noreply_${makeid(8)}@marketx.id`,
+          from: `Market X <noreply@marketx.id>`,
           to: email,
           subject: 'Instruksi Atur Ulang Kata Sandi',
           // text: `This is your email confirmation code: ${code}`,
