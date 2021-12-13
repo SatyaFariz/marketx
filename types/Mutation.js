@@ -51,6 +51,7 @@ const SpecificationFieldInput = require('./SpecificationFieldInput')
 const { bulkUpload, singleUpload } = require('../utils/upload')
 const getMobileNumberFormats = require('../utils/getMobileNumberFormats')
 const sendWhatsApp = require('../utils/sendWhatsApp')
+const isDisposableEmail = require('../utils/isDisposableEmail')
 const PivotFieldInput = require('./PivotFieldInput')
 
 const telegramChatIds = [parseInt(process.env.TELEGRAM_NOTIFICATION_CHAT_ID, 10)]
@@ -405,6 +406,17 @@ module.exports = new GraphQLObjectType({
           }
           
         } else if(isEmail(id)) {
+          const disposableCheck = await isDisposableEmail(id)
+          
+          if(disposableCheck.disposable) {
+            return {
+              actionInfo: {
+                hasError: true,
+                message: `Kami tidak dapat mengirim kode verifikasi ke domain email ${disposableCheck.domain} karena domain ini kami blacklist.`
+              }
+            }
+          }
+
           const verification = await VerificationModel.findOneAndUpdate(
             { 
               id 
