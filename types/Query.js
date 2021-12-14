@@ -70,7 +70,7 @@ module.exports = new GraphQLObjectType({
     attributes: {
       type: new GraphQLList(Attribute),
       resolve: async () => {
-        return await AttributeModel.find({})
+        return await AttributeModel.find({}, null, { sort: { name: 1 }})
       }
     },
     categories: {
