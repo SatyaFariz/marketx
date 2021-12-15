@@ -8,7 +8,7 @@ const expressPlayground = require('graphql-playground-middleware-express').defau
 const mongoose = require('mongoose')
 const multer = require('multer')
 const session = require('express-session')
-const redis = require('redis')
+const redisClient = require('./lib/redis')
 const RedisStore = require('connect-redis')(session)
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -65,10 +65,10 @@ app.use(cors({
   credentials: true
 }))
 
-const redisClient = redis.createClient({
-  host: 'redis',
-  port: 6379
-}).on('error', (err) => console.error('ERR:REDIS:', err))
+// const redisClient = redis.createClient({
+//   host: 'redis',
+//   port: 6379
+// }).on('error', (err) => console.error('ERR:REDIS:', err))
 
 const expressSession = session({
   store: new RedisStore({ client: redisClient, disableTTL: true }),
