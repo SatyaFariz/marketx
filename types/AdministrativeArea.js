@@ -1,12 +1,15 @@
 const {
   GraphQLString,
   GraphQLInt,
+  GraphQLList,
   GraphQLObjectType
 } = require('graphql')
 
-module.exports = new GraphQLObjectType({
+const AdministrativeAreaLoader = require('../dataloader/AdministrativeAreaLoader')
+
+const AdministrativeArea = new GraphQLObjectType({
   name: 'AdministrativeArea',
-  fields: {
+  fields: () => ({
     administrativeAreaId: {
       type: GraphQLInt,
       resolve: root => root.administrative_area_id
@@ -14,5 +17,14 @@ module.exports = new GraphQLObjectType({
     name: {
       type: GraphQLString
     },
-  }
+    ancestors: {
+      type: new GraphQLList(AdministrativeArea),
+      resolve: async root => {
+        const parentIds = JSON.parse(root.parent_ids).slice(1)
+        return await Promise.all(parentIds.map(id => AdministrativeAreaLoader.load(id)))
+      }
+    }
+  })
 })
+
+module.exports = AdministrativeArea

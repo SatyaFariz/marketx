@@ -169,7 +169,9 @@ module.exports = new GraphQLObjectType({
     administrativeAreas: {
       type: new GraphQLList(AdministrativeArea),
       args: {
-        parentId: { type: GraphQLInt }
+        parentId: { type: GraphQLInt },
+        searchTerm: { type: GraphQLString },
+        isPopular: { type: GraphQLBoolean }
       },
       resolve: async (_, args) => {
         return await getAdministrativeAreas(args)

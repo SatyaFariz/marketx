@@ -5,11 +5,20 @@ const instance = axios.create({
   baseURL: process.env.ADMINISTRATIVE_AREA_SERVICE_URL
 })
 
+const popularIds = [114529,114530,114531,114532]
+
 const getAdministrativeAreas = async (args) => {
   const endpoint = '/api/administrative_areas'
   try {
     let query = ''
-    if(args?.ids) {
+    if(args.isPopular) {
+      query = `?ids=${popularIds.join(',')}`
+      const response = await instance.get(`${endpoint}${query}`)
+      return response.data
+    } else if(args.searchTerm?.length >= 3) {
+      const response = await instance.get(`${endpoint}/search?q=${args.searchTerm}`)
+      return response.data
+    } else if(args?.ids) {
       query = `?ids=${args.ids.join(',')}`
     } else if(args?.parentId) {
       query = `?parentId=${args.parentId}`
