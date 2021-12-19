@@ -166,6 +166,16 @@ module.exports = new GraphQLObjectType({
         })
       }
     },
+    administrativeArea: {
+      type: AdministrativeArea,
+      args: {
+        id: { type: GraphQLInt }
+      },
+      resolve: async (_, { id }) => {
+        const areas = await getAdministrativeAreas({ ids: [id] })
+        return areas[0]
+      }
+    },
     administrativeAreas: {
       type: new GraphQLList(AdministrativeArea),
       args: {
