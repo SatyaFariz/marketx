@@ -2,7 +2,7 @@ const { cursorToId } = require('./relayCursor')
 const ProductModel = require('../database/models/Product')
 const { isMongoId } = require('validator')
 
-module.exports = async ({ q, limit, after, categoryId, published, storeId, user }) => {
+module.exports = async ({ q, limit, after, categoryId, locationId, published, storeId, user }) => {
   const options = { 
     sort: { sequence: -1 }, 
     limit: limit 
@@ -32,6 +32,9 @@ module.exports = async ({ q, limit, after, categoryId, published, storeId, user 
       }
     }
 
+    if(locationId)
+      query.administrativeAreaIds = locationId
+
     if(typeof published === 'boolean')
       query.published = published
 
@@ -58,6 +61,9 @@ module.exports = async ({ q, limit, after, categoryId, published, storeId, user 
         delete query.isPublished
       }
     }
+
+    if(locationId)
+      query.administrativeAreaIds = locationId
 
     if(typeof published === 'boolean')
       query.published = published

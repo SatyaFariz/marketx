@@ -158,11 +158,12 @@ module.exports = new GraphQLObjectType({
         categoryId: { type: GraphQLString },
         storeId: { type: GraphQLString },
         published: { type: GraphQLBoolean },
+        locationId: { type: GraphQLInt },
         ...forwardConnectionArgs
       },
-      resolve: async (_, { first, after, q, categoryId, storeId }, { session: { user }}) => {
+      resolve: async (_, { first, after, q, categoryId, storeId, locationId }, { session: { user }}) => {
         return await relayConnectionFrom(first, async (limit) => {
-          return await searchProducts({ q, limit, after, categoryId, storeId, user })
+          return await searchProducts({ q, limit, after, categoryId, storeId, locationId, user })
         })
       }
     },
