@@ -1756,7 +1756,7 @@ module.exports = new GraphQLObjectType({
           subcat.ancestorIds = [...parentCat.ancestorIds, parentId]
           subcat.listingType = parentCat.listingType
           subcat.lastUpdatedBy = user.id
-          subcat.isPublished = true
+          subcat.isPublished = false
           subcat.specFields = parentCat.specFields.map(field => {
             return {
               _id: mongoose.Types.ObjectId(),
