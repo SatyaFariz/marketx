@@ -8,6 +8,7 @@ const {
 } = require('graphql')
 const { forwardConnectionArgs } = require('graphql-relay')
 const { GraphQLEmail } = require('graphql-custom-types')
+const { isMongoId } = require('validator')
 
 const Post = require('./Post')
 const PostModel = require('../database/models/Post')
@@ -105,7 +106,12 @@ module.exports = new GraphQLObjectType({
       args: {
         id: { type: new GraphQLNonNull(GraphQLString) }
       },
-      resolve: async (_, { id }) => await CategoryModel.findById({ _id: id })
+      resolve: async (_, { id }) => {
+        if(isMongoId(id)) {
+          return await CategoryModel.findById(id)
+        }
+        return await CategoryModel.findOne({ slug: id })
+      }
     },
     rentalDurations: {
       type: new GraphQLList(Unit),
