@@ -1832,16 +1832,40 @@ module.exports = new GraphQLObjectType({
           cat.isPublished = input.isPublished
           cat.specFields = input.specFields
           cat.lastUpdatedBy = user.id
+          if(input.slug?.trim()?.length > 0) {
+            cat.slug = input.slug
+          } else {
+            delete cat.slug
+          }
 
-          if(uploadedImage) {
-            const prevIcon = cat.icons && cat.icons[0]
-            cat.icons = [uploadedImage]
-            if(prevIcon) {
-              uploader.destroy(prevIcon._id)
+          let saved = null
+          try {
+            saved = await cat.save()
+
+            if(uploadedImage) {
+              const prevIcon = cat.icons && cat.icons[0]
+              cat.icons = [uploadedImage]
+              if(prevIcon) {
+                uploader.destroy(prevIcon._id)
+              }
+            }
+          } catch(e) {
+            if(e.code === 11000) {
+              if(uploadedImage) {
+                uploader.destroy(uploadedImage._id)
+              }
+
+              return {
+                actionInfo: {
+                  hasError: true,
+                  message: 'Duplicate slug.'
+                }
+              }
             }
           }
 
-          const saved = await cat.save()
+          
+
           return {
             actionInfo: {
               hasError: false,

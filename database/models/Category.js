@@ -6,7 +6,14 @@ const imageSchema = require('../schemas/Image')
 const categorySchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    trim: true
+  },
+  slug: {
+    type: String,
+    sparse: true,
+    unique: true,
+    trim: true
   },
   level: {
     type: Number,

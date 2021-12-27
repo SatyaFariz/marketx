@@ -18,6 +18,9 @@ module.exports = new GraphQLInputObjectType({
     name: {
       type: new GraphQLNonNull(GraphQLString)
     },
+    slug: {
+      type: GraphQLString
+    },
     isPublished: { 
       type: new GraphQLNonNull(GraphQLBoolean)
     },

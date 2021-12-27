@@ -22,6 +22,9 @@ const Category = new GraphQLObjectType({
     name: {
       type: GraphQLString,
     },
+    slug: {
+      type: GraphQLString,
+    },
     code: {
       type: GraphQLString
     },
