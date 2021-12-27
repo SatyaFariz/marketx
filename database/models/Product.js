@@ -17,6 +17,10 @@ const productSchema = new Schema({
     type: String,
     required: true
   },
+  searchField: {
+    type: String,
+    trim: true
+  },
   images: {
     type: [imageSchema],
     required: true,

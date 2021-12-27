@@ -124,5 +124,8 @@ module.exports = new GraphQLObjectType({
     leads: {
       type: GraphQLInt
     },
+    searchField: {
+      type: GraphQLString
+    },
   }
 })

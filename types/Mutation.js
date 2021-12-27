@@ -53,6 +53,7 @@ const getMobileNumberFormats = require('../utils/getMobileNumberFormats')
 const sendWhatsApp = require('../utils/sendWhatsApp')
 const isDisposableEmail = require('../utils/isDisposableEmail')
 const PivotFieldInput = require('./PivotFieldInput')
+const createEdgeNGrams = require('../utils/createEdgeNGrams')
 
 const telegramChatIds = [parseInt(process.env.TELEGRAM_NOTIFICATION_CHAT_ID, 10)]
 const MAX_IMAGE_UPLOAD = 7
@@ -1157,6 +1158,7 @@ module.exports = new GraphQLObjectType({
             }
           }
 
+          product.searchField = createEdgeNGrams(input.name)
           product.lastUpdatedBy = user.id
 
           const savedProduct = await product.save()
@@ -1349,6 +1351,7 @@ module.exports = new GraphQLObjectType({
               listingType: category.listingType,
               images,
               administrativeAreaIds: [provinceId, cityId, districtId],
+              searchField: createEdgeNGrams(input.name),
               merchantId: user.id,
               lastUpdatedBy: user.id
             })
@@ -2189,6 +2192,18 @@ module.exports = new GraphQLObjectType({
         if(user?.isAdmin) {
           const duration = await new UnitModel(args).save()
           return duration._id.toString()
+        }
+      }
+    },
+    updateSearchFields: {
+      type: GraphQLBoolean,
+      resolve: async (_, args, { session: { user }}) => {
+        if(user?.isAdmin) {
+          const products = await ProductModel.find({})
+          for(let i = 0; i < products.length; i++) {
+            products[i].searchField = createEdgeNGrams(products[i].name)
+            products[i].save().then(() => console.log('saved'))
+          }
         }
       }
     }
