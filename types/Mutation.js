@@ -2195,17 +2195,5 @@ module.exports = new GraphQLObjectType({
         }
       }
     },
-    updateSearchFields: {
-      type: GraphQLBoolean,
-      resolve: async (_, args, { session: { user }}) => {
-        if(user?.isAdmin) {
-          const products = await ProductModel.find({})
-          for(let i = 0; i < products.length; i++) {
-            products[i].searchField = createEdgeNGrams(products[i].name)
-            products[i].save().then(() => console.log('saved'))
-          }
-        }
-      }
-    }
   }
 })
